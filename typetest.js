@@ -6,5 +6,10 @@
     console.log("after");
     
     async function QU() {        
-      await db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.USERNAME, 1)
+      try {
+        let data = await db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.MAIL, '4', dbFields.playerInfo.RANK);
+        console.log(JSON.stringify(data, null, 2));
+      } catch (error) {
+        console.error(error);
+      }
     };

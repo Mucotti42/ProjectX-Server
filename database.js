@@ -7,11 +7,6 @@ const pool = createPool({
     connectionLimit: 10
 })
 
-//  pool.query('SELECT userName FROM projectxdb.playerinfo WHERE primaryKey = 1;', (err, res) =>{
-//      if (err) {
-//          return console.error("Sorgu Hatası:", err);
-//      }
-//      console.log(res);})
 module.exports = {
     GetValue:function() {
         pool.query('SELECT * FROM projectxdb.playerinfo;', (err, res) =>{
@@ -23,10 +18,44 @@ module.exports = {
 }}
 
 async function GetData(tableName, fieldName, key, queryWith = 'primaryKey') {        
-    pool.query(`SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = ${key};`, (error, results) => {
-        console.log(res)        
+    console.log(`SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = ${key};`);
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = ${key};`, (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                console.log(results);
+                resolve(results);
+            }
+        });
     });
 }
 module.exports = {
-    GetData
+    GetData,
+    CheckData,
+    InsertData
 };
+
+const CheckData = async function (tableName, fieldName, key, value, queryWith = 'primaryKey') {
+    return new Promise((resolve, reject) => {
+      pool.query(`SELECT ${fieldName} FROM ${tableName} WHERE ${queryWith} = ? AND ${fieldName} = ?`, [key, value], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  };
+  
+  const InsertData = async function (tableName, key, fieldName, newValue, queryWith = 'primaryKey') {
+    return new Promise((resolve, reject) => {
+      pool.query(`UPDATE ${tableName} SET ${fieldName} = ? WHERE ${queryWith} = ?`, [newValue, key], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  };

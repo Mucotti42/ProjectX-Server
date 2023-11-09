@@ -9,8 +9,8 @@ const playerInfo = {
   UNIQUEID: 'uniqueId',
   USERNAME: 'userName',
   DATETIME: 'dateTime',
-  MAIL: 'mail',
+  MAIL: 'email',
   APIID: 'apiId',
-  RANK: 'rank'
+  RANK: 'playerRank'
 }
 module.exports = { tableTypes, playerInfo };

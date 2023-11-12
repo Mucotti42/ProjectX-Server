@@ -1,5 +1,5 @@
 const db = require('../database.js')
-//const communication = require('../Communication.js')
+const communication = require('../Communication.js')
 
 
 exports.GetAge = async function(client,data){

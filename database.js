@@ -30,11 +30,6 @@ async function GetData(tableName, fieldName, key, queryWith = 'primaryKey') {
         });
     });
 }
-module.exports = {
-    GetData,
-    CheckData,
-    InsertData
-};
 
 const CheckData = async function (tableName, fieldName, key, value, queryWith = 'primaryKey') {
     return new Promise((resolve, reject) => {
@@ -48,7 +43,7 @@ const CheckData = async function (tableName, fieldName, key, value, queryWith = 
     });
   };
   
-  const InsertData = async function (tableName, key, fieldName, newValue, queryWith = 'primaryKey') {
+  const SetData = async function (tableName, key, fieldName, newValue, queryWith = 'primaryKey') {
     return new Promise((resolve, reject) => {
       pool.query(`UPDATE ${tableName} SET ${fieldName} = ? WHERE ${queryWith} = ?`, [newValue, key], (error, results) => {
         if (error) {
@@ -59,3 +54,21 @@ const CheckData = async function (tableName, fieldName, key, value, queryWith = 
       });
     });
   };
+
+  const InsertData = async function (tableName, data) {
+    return new Promise((resolve, reject) => {
+      pool.query(`INSERT INTO ${tableName} SET ?`, data, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  };
+
+  module.exports = {
+    GetData,
+    CheckData,
+    InsertData
+};

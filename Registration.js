@@ -9,7 +9,6 @@ class Player{
         this.leader = leader;
     }
 }
-
 // key(id) / player(id, nick, client)
 
 const playerInfoList = []  //Holds Player Info

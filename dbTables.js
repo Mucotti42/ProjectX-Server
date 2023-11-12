@@ -1,10 +1,13 @@
 const tableTypes = {
+  TESTTABLE:'TestTable',
   PLAYERINFO:'playerinfo',
   DEVICEINFO:'deviceinfo',
   SESSIONINFO:'sessioninfo'
 }
 
 const playerInfo = {
+  ID: 'id',
+  AGE: 'age',
   PRIMARYKEY: 'primaryKey',
   UNIQUEID: 'uniqueId',
   USERNAME: 'userName',

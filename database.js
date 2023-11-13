@@ -72,12 +72,12 @@ const CheckData = async function (tableName, fieldName, key, value, queryWith = 
       const fields = Object.keys(data).join(', ');
       const values = Object.values(data).map(value => (value === 'UUID()' ? value : pool.escape(value))).join(', ');
 
-        const query = `INSERT INTO projectxdb.${tableName} (${fields}) VALUES (${values})`;
+        const query = `INSERT INTO projectxdb.${tableName} (${fields}) VALUES (${values}) RETURNING primaryKey`;
       pool.query(query, (error, results) => {
         if (error) {
           reject(error);
         } else {
-          resolve(results.insertId);
+          resolve(results);
         }
       });
     });

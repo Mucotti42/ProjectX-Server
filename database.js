@@ -73,7 +73,7 @@ const CheckData = async function (tableName, fieldName, key, value, queryWith = 
         if (error) {
           reject(error);
         } else {
-          resolve(results);
+          resolve(results.insertId);
         }
       });
     });

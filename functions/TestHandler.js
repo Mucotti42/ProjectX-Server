@@ -11,8 +11,8 @@ exports.GetAge = async function(client,data){
     //     [1,'Uzay']
     // ]
     const userdata ={
-        primaryKey: 1,
-        userName: 'Uzay'
+        userName: 'Berkay'
     };
-    db.InsertData(dbFields.tableTypes.PLAYERINFO,userdata)
+    const key = db.InsertData(dbFields.tableTypes.PLAYERINFO,userdata)
+    console.log('key : ' + key)
 }

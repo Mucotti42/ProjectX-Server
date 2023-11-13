@@ -23,7 +23,8 @@ module.exports = {
     })
 }}
 
-async function GetData(tableName, fieldName, key, queryWith = 'primaryKey') {        
+async function GetData(tableName, fieldName, key, queryWith = 'primaryKey') {   
+  //TODO IF QUERY FIELD IS STRING ESCAPE IT
     console.log(`SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = '${key}';`);
     return new Promise((resolve, reject) => {
         pool.query(`SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = ${pool.escape(key)};`, (error, results) => {

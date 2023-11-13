@@ -70,10 +70,10 @@ const CheckData = async function (tableName, fieldName, key, value, queryWith = 
   const InsertData = async function (tableName, data) {
     return new Promise((resolve, reject) => {
       const fields = Object.keys(data).join(', ');
-      const values = Object.values(data).map(value => '${value}').join(', ');
+      const values = Object.values(data).map(value => (value === 'UUID()' ? value : pool.escape(value))).join(', ');
 
-      const query = `INSERT INTO projectxdb.${tableName} (${fields}) VALUES (${values})`;
-      pool.query(`INSERT INTO projectxdb.${tableName} SET ?`, data, (error, results) => {
+        const query = `INSERT INTO projectxdb.${tableName} (${fields}) VALUES (${values})`;
+      pool.query(query, (error, results) => {
         if (error) {
           reject(error);
         } else {

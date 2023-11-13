@@ -69,7 +69,7 @@ const CheckData = async function (tableName, fieldName, key, value, queryWith = 
 
   const InsertData = async function (tableName, data) {
     return new Promise((resolve, reject) => {
-      pool.query(`INSERT INTO ${tableName} SET ?`, data, (error, results) => {
+      pool.query(`INSERT INTO projectxdb.${tableName} SET ?`, data, (error, results) => {
         if (error) {
           reject(error);
         } else {

@@ -7,8 +7,12 @@ exports.GetAge = async function(client,data){
     console.log('GetAge' + dbData);
     communication.SendPackage(client,'Print', dbData["userName"])
 
-    var value =[
-        [1,'Uzay']
-    ]
-    db.InsertData(dbFields.tableTypes.PLAYERINFO,value)
+    // var value =[
+    //     [1,'Uzay']
+    // ]
+    const data ={
+        primaryKey: 1,
+        userName: 'Uzay'
+    };
+    db.InsertData(dbFields.tableTypes.PLAYERINFO,data)
 }

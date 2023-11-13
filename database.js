@@ -71,21 +71,13 @@ const CheckData = async function (tableName, fieldName, key, value, queryWith = 
     return new Promise((resolve, reject) => {
       const fields = Object.keys(data).join(', ');
       const values = Object.values(data).map(value => (value === 'UUID()' ? value : pool.escape(value))).join(', ');
-  
-      const query1 = `INSERT INTO projectxdb.${tableName} (${fields}) VALUES (${values})`;
-      const query2 = `SELECT LAST_INSERT_ID()`;
-  
-      pool.query(query1, (error, results) => {
+
+        const query = `INSERT INTO projectxdb.${tableName} (${fields}) VALUES (${values})`;
+      pool.query(query, (error, results) => {
         if (error) {
           reject(error);
         } else {
-          pool.query(query2, (error, results) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve(results[0]['LAST_INSERT_ID()']);
-            }
-          });
+          resolve(results);
         }
       });
     });

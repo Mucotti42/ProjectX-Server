@@ -1,10 +1,16 @@
 const {createPool} = require('mysql')
 
+// const pool = createPool({
+//     host: "localhost",
+//     user: "root",
+//     password: "626300",
+//     connectionLimit: 10
+// })
 const pool = createPool({
-    host: "localhost",
-    user: "root",
-    password: "626300",
-    connectionLimit: 10
+  host: "localhost",
+  user: "root",
+  password: "Celestial01!",
+  connectionLimit: 10
 })
 
 module.exports = {

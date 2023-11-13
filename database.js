@@ -31,10 +31,12 @@ async function GetData(tableName, fieldName, key, queryWith = 'primaryKey') {
                 reject(error);
             } else {
                 console.log(results);
-
+                console.log('is array '+ Array.isArray(results));
+                console.log('length '+ results.length);
                 if(Array.isArray(results) && results.length < 2)
                   results = results[0];
-                
+              
+              console.log(results);
                 resolve(results);
             }
         });

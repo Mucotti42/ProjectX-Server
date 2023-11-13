@@ -16,7 +16,7 @@ module.exports = server;
 
 server.on('listening', () =>
 {
-    console.log('server is listening on port ' + wsPort)
+    console.log('WebSocket server is listening on port ' + wsPort)
 })
 //-------------------------------------
 

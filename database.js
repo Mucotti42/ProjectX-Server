@@ -24,7 +24,7 @@ module.exports = {
 }}
 
 async function GetData(tableName, fieldName, key, queryWith = 'primaryKey') {        
-    console.log(`SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = ${key};`);
+    console.log(`SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = '${key}';`);
     return new Promise((resolve, reject) => {
         pool.query(`SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = ${key};`, (error, results) => {
             if (error) {

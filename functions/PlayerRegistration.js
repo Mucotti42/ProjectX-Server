@@ -28,5 +28,4 @@ exports.RegisterPlayer = async function(client,data){
                 console.log('Player primary ID sent succesfully!')
               })
     }
-
 }

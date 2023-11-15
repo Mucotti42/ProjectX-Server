@@ -6,7 +6,7 @@ function handleMessage(messageType,client,data) {
     if (handlerFunction) {
         handlerFunction(client,data);
     } else {
-        console.log('Identified message type:', messageType);
+        console.log('Not identified message type:', messageType);
     }
 }
 

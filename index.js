@@ -1,6 +1,6 @@
 const messageHandlers = require('./messageHandler');
 const WebSocket = require('ws')
-const registration = require('./Registration')
+const userManager = require('./UserManager')
 
 
 
@@ -23,17 +23,13 @@ server.on('listening', () =>
 //Client Connection -------------------
 server.on('connection',(client) =>
 {
-    //console.log('New client with id: ' + req.headers['sec-websocket-key'])
-    
-    registration.Welcome(client)
+    userManager.Welcome(client)
     client.on('message', (message)=>
     {
         let data = JSON.parse(message);
-        //console.log(dbaase.GetValue())
-
         console.log(data.type)
+
         
-        //global[data.type](client, data);
         messageHandlers.handleMessage(data.type,client,data);        
     })
 })

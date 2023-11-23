@@ -14,28 +14,39 @@ const pool = createPool({
 //   connectionLimit: 10
 // })
 
-// async function GetData(tableName, fieldName, key, queryWith = 'primaryKey') {   
-//   //TODO IF QUERY FIELD IS STRING ESCAPE IT
-//     console.log('isString ' + typeof key === 'string')
-//     key = typeof key === 'string' ? pool.escape(key) : key;
-//     console.log(`SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = '${key}';`);
-//     return new Promise((resolve, reject) => {
-//         pool.query(`SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = ${key};`, (error, results) => {
-//             if (error) {
-//                 reject(error);
-//             } else {
-//                 console.log(results);
-//                 console.log('is array '+ Array.isArray(results));
-//                 console.log('length '+ results.length);
-//                 if(Array.isArray(results) && results.length < 2)
-//                   results = results[0];
-              
-//               console.log(results);
-//                 resolve(results);
-//             }
-//         });
-//     });
-// }
+      async function GetCharacterData(character, fieldName = null,  callback = null) {
+
+        if(fieldName == null)
+          fieldName = '*'
+        key = typeof key === 'string' ? pool.escape(key) : key;
+        
+        query = `SELECT ${fieldName} FROM projectxdb.${tableName} WHERE character = ${key};`;
+        console.log(query);
+
+        const results = await new Promise((resolve, reject) => {
+          pool.query(query, (error, results) => {
+            if (error) {
+              reject(error);
+            } else {
+              console.log('ch data results:');
+              console.log(results);
+            
+              if (Array.isArray(results) && results.length < 2) {
+                results = results[0];
+              }
+            
+              console.log(results);
+              resolve(results);
+            }
+          });
+        });
+
+        if (callback) {
+          callback(results);
+        }
+
+        return results;
+}
       async function GetData(tableName, fieldName, key, queryWith = 'primaryKey', callback = null) {
         // Escape key if it's a string
         console.log('isString: ');
@@ -77,8 +88,8 @@ const pool = createPool({
         const query = `SELECT COUNT(*) as count FROM projectxdb.${tableName} WHERE ${queryWith} = ?`;
       
         try {
-          const [results] = await pool.query(query, [key]);
-          const count = results[0].count;
+          const results = await pool.query(query, [key]);
+          const count = results.count;
           console.log('row count' + count)
           if (count > 0) {
             return true;

@@ -1,6 +1,7 @@
 const messageHandlers = require('./messageHandler');
 const WebSocket = require('ws')
 const userManager = require('./UserManager')
+const matchmakingHandler = require('./matchmakingHandler.js')
 
 
 
@@ -28,8 +29,13 @@ server.on('connection',(client) =>
     {
         let data = JSON.parse(message);
         console.log(data.type)
-
         
         messageHandlers.handleMessage(data.type,client,data);        
     })
+
+    client.on('close', (code, reason) => {
+        console.log('Player disconnected:', code, reason);
+        matchmakingHandler.EndMatchmaking(client,1)
+        userManager.DisconnectedPlayer(client)
+      });
 })

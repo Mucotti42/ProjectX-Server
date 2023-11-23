@@ -1,5 +1,6 @@
-const communication = require('./Communication.js')
+const communication = require('./communication.js')
 const db = require('./database.js')
+
 
 class Player{
     constructor(primaryKey, client){
@@ -7,17 +8,26 @@ class Player{
         this.client = client
     }
 }
-const playerInfo = []  //Holds Player Info
+const playerInfoList = []  //Holds Player Info
 
 module.exports = {
     Welcome: function(client)
     {
-        communication.SendPackage(client,'Hi', p)
+        communication.SendPackage(client,'Hi')
     },
     
     RegisterPlayerInfo: function(primaryKey, client){
         let p = new Player(primaryKey,client)
-        playerInfo.push(p)
+        playerInfoList.push(p)
+        console.log('new player registered ' + primaryKey + ' ')
+        console.log(playerInfoList.length)
+    },
+    DisconnectedPlayer: function(client){
+        var player = this.GetPlayerWithClient(client);
+        if(playerInfoList.includes(player))
+            playerInfoList.splice(player);
+
+        console.log(playerInfoList.length)
     },
 
     GetPlayerWithPrimaryKey: function(primaryKey){
@@ -38,8 +48,4 @@ module.exports = {
 
         console.log("No player id found")
     }
-}
-
-function GoodBy(client){
-    playerInfoList.splice(player)
 }

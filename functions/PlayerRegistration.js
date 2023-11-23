@@ -1,16 +1,17 @@
 const db = require('../database.js')
-const communication = require('../Communication.js')
+const communication = require('../communication.js')
 const dbFields = require('../dbTables.js')
+const userManager = require('../UserManager.js')
 
 exports.RegisterPlayer = async function(client,data){
     
     if(data.isPrimaryKey){
-        
         if(await db.IsRowExists(dbFields.tableTypes.PLAYERINFO,data.key))
             console.log('User exist')
             db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.USERNAME,data.key,'primaryKey',
-            (data) => {
-                console.log('returning value with call back' + data.userName);
+            (incomingdata) => {
+                console.log('returning value with call back' + incomingdata.userName);
+                userManager.RegisterPlayerInfo(data.key,client)
               })
     }
     else{
@@ -18,7 +19,8 @@ exports.RegisterPlayer = async function(client,data){
         const userdata ={
             primaryKey: 'UUID()',
             userName: 'New Player',
-            apiId: data.key
+            apiId: data.key,
+            playerRank : 50
         };
         await db.InsertData(dbFields.tableTypes.PLAYERINFO,userdata);
 
@@ -26,6 +28,12 @@ exports.RegisterPlayer = async function(client,data){
             (data) => {
                 communication.SendPackage(client,'SavePrimaryKey',data)
                 console.log('Player primary ID sent succesfully!')
+                key = data.primaryKey;
+                userManager.RegisterPlayerInfo(key,client)
               })
     }
+    
+}
+exports.Disconnect = async function(){
+        
 }

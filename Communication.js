@@ -16,8 +16,10 @@ exports.SendPackage = (client, type, data) => {
 };
 
 exports.SendAll = (gameId, type, data) => {
-    let players = activeMatches.GetMatch(gameId).players;
-    for (const player in players) {
+    let players = activeMatches.GetMatch('1').readyPlayerList;
+    for (let i = 0; i < players.length; i++) {
+        let player = players[i];
+        console.log('player ', player)
         let client = userManager.GetPlayerWithPrimaryKey(player).client;
         this.SendPackage(client,type,data)
     }

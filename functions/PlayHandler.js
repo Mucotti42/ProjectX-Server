@@ -8,5 +8,5 @@ exports.Play = function (client, data) {
     matchmaking.StartMatchmaking(client,mode)
 }
 exports.GameSceneLoaded = function (client,data) {
-    matchBegining.PlayerSceneLoaded(userManager.GetPlayerWithClient().primaryKey, data.value)
+    matchBegining.PlayerSceneLoaded(userManager.GetPlayerWithClient(client).primaryKey, data.value)
 }

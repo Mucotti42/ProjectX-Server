@@ -1,7 +1,7 @@
 const db = require('./database.js')
 const userManager = require('./UserManager.js')
 const dbFields = require('./dbTables.js')
-const gameBegining = require('./matchBegining.js')
+const matchBegining = require('./matchBegining.js')
 
 class Player{
     constructor(primaryKey, client,gameMode,rank){
@@ -39,7 +39,7 @@ exports.EndMatchmaking = function(client,data){
 
             console.log((player.range + otherPlayer.range) - Math.abs(player.rank - otherPlayer.rank))
         if (Math.abs(player.rank - otherPlayer.rank) <= player.range + otherPlayer.range) {
-          gameBegining.StartGame(player.primaryKey,otherPlayer.primaryKey,player.gameMode)
+            matchBegining.LoadMatch(player.primaryKey,otherPlayer.primaryKey,player.gameMode)
 
             pool.splice(pool.indexOf(player), 1);
             pool.splice(pool.indexOf(otherPlayer), 1);

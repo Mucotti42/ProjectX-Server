@@ -13,6 +13,13 @@ const playerInfoList = []  //Holds Player Info
 module.exports = {
     Welcome: function(client)
     {
+        db.GetData('characterinfo','attackcoords',2,'primaryKey',(data)=>{
+            console.log('data ',data);
+            data = JSON.parse(data.attackcoords)
+            communication.SendPackage(client,'coords',data)
+            //data = JSON.parse(data.attackcoords)
+            //console.log(data[0]);
+        });
         communication.SendPackage(client,'Hi')
     },
     
@@ -31,12 +38,14 @@ module.exports = {
     },
 
     GetPlayerWithPrimaryKey: function(primaryKey){
+        console.log('find player with primaryKey : ', primaryKey)
+        console.log(playerInfoList)
         const foundPlayer = playerInfoList.find(player => player.primaryKey === primaryKey);
 
         if(foundPlayer)
             return foundPlayer
 
-        console.log('No player found with id: ' + id)
+        console.log('No player found with id: ' + primaryKey)
     },
 
     GetPlayerWithClient: function(client){

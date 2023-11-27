@@ -1,3 +1,7 @@
+const communication = require('./communication')
+const activeMatches = require('./activeMatches')
+const gameStates = require('./gameStates').States
+
 class Piece{
     constructor(pieceId, pieceType, piecePos, health, damage){
         this.pieceId = pieceId;
@@ -12,14 +16,15 @@ class Piece{
 
 exports.StartMatch = function (match){
     setTimeout(() => {
-        Placement(match.id, match.pieceType, match.position);
-      }, 10000);
+        this.SetPlacementState(match.id);
+      }, 1000);
 }
 
 exports.Placement = function (matchId,pieceType,position){
-    match.player1
+    //communication.SendAll(matchId, )
 }
-//TODO BLOCKING STATE
-exports.SetPlacementState = function(gameId){
-    communication.SendAll(gameId, 'PlacementState', newTurn)
+
+exports.SetPlacementState = function(matchId){
+    communication.SendAll(matchId, 'PlacementState')
+    activeMatches.SetMatchState(matchId,gameStates.PLACEMENT)
 }

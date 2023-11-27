@@ -2,6 +2,7 @@ const messageHandlers = require('./messageHandler');
 const WebSocket = require('ws')
 const userManager = require('./UserManager')
 const matchmakingHandler = require('./matchmakingHandler.js')
+const db = require("./database");
 
 
 

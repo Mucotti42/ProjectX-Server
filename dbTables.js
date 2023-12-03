@@ -15,7 +15,8 @@ const playerInfo = {
   DATETIME: 'dateTime',
   MAIL: 'email',
   APIID: 'apiId',
-  RANK: 'playerRank'
+  RANK: 'playerRank',
+  CHARACTERS: 'characters'
 }
 const characterTypes = {
   MUSHROOM:'mushroom',

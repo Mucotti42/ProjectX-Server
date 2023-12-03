@@ -1,13 +1,14 @@
 const userManager = require('./UserManager.js')
 const communication = require('./communication.js')
 const matchProgress = require('./matchProgress.js');
-const ActiveMatches = require('./activeMatches.js')
-const Match = require('./activeMatches.js').Match;
+const ActiveMatches = require('./ActiveMatches.js')
+const Match = ActiveMatches.Match;
 
 exports.LoadMatch = function (player1, player2,gameMode) {
 
     var map = Math.floor(Math.random() * 1);
     var gameId = '1'; //TODO UUID
+    
     var match = new Match(player1,player2,gameMode,map,gameId)
     ActiveMatches.SetMatch(gameId,match)
 

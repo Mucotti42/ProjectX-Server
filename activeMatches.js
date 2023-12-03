@@ -1,7 +1,7 @@
 exports.Match = class{
     constructor(player1, player2,gameMode,map, gameId){
-        this.player1 = player1 
-        this.player2 = player2
+        this.player1 = player1;
+        this.player2 = player2;
         this.gameMode = gameMode;
         this.gameId = gameId;
         this.map = map;
@@ -18,11 +18,9 @@ exports.Match = class{
 const matches = new Map();
 
 exports.GetMatch = function (gameId) {
-    console.log(matches.has(gameId))
-    console.log('matches get ', matches)
-    console.log('get match with id: ' + gameId)
+    console.log(gameId)
+    console.log(matches)
     let match = matches.get(gameId);
-    console.log('p1 get '+ match)
     if(match)
         return match;
 
@@ -30,14 +28,11 @@ exports.GetMatch = function (gameId) {
 }
 
 exports.SetMatch = function (gameId, match) {
-    console.log('set match with id: ' + gameId)
-    console.log('p1 set '+match.player1)
     matches.set(gameId, match);
-    console.log('matches set ', matches)
 }
 
 exports.SetMatchState = function(gameId, state){
-    GetMatch(gameId).gameState = state;
+    this.GetMatch(gameId).gameState = state;
 }
 
 

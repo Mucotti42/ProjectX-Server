@@ -114,9 +114,9 @@ const pool = createPool({
           });
         };
 
-        const SetData = async function (tableName, fieldName, newValue, queryWith = 'primaryKey') {
+        const SetData = async function (tableName, fieldName, key, value, queryWith = 'primaryKey') {
           return new Promise((resolve, reject) => {
-            pool.query(`UPDATE ${tableName} SET ${fieldName} = ? WHERE ${queryWith} = ?`, newValue, (error, results) => {
+            pool.query(`UPDATE projectxdb.${tableName} SET ${fieldName} = ? WHERE ${queryWith} = ?`, [value, key], (error, results) => {
               if (error) {
                 reject(error);
               } else {

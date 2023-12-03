@@ -1,4 +1,4 @@
-const activeMatches = require('./activeMatches')
+const activeMatches = require('./ActiveMatches')
 const communication = require('./communication')
 
 exports.NextTurn = function(gameId){

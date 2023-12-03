@@ -1,4 +1,4 @@
-const activeMatches = require('./activeMatches')
+const activeMatches = require('./ActiveMatches')
 const userManager = require('./UserManager')
 
 //Communication------------------------
@@ -11,7 +11,7 @@ exports.SendPackage = (client, type, data) => {
     }
 
     let package = ToJson(new pack(type, data))
-    console.log(package)
+    console.log('package sended' + package)
     client.send(package)
 };
 

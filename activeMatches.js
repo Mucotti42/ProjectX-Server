@@ -12,7 +12,7 @@ exports.Match = class{
         this.players = new Array();
         this.players.push(player1);
         this.players.push(player2);
-        this.turn = -1;
+        this.turn = 1;
     }
 }
 const matches = new Map();
@@ -25,6 +25,10 @@ exports.GetMatch = function (gameId) {
         return match;
 
     console.log('No Match Found!!!')
+}
+
+exports.IsMaster = function (gameId, playerId) {
+    return this.GetMatch(gameId).player1 == playerId
 }
 
 exports.SetMatch = function (gameId, match) {

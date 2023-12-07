@@ -14,13 +14,15 @@ const pool = createPool({
 //   connectionLimit: 10
 // })
 
-      async function GetCharacterData(character, fieldName = null,  callback = null) {
+      async function GetCharacterData(key, fieldName = null,  callback = null) {
 
         if(fieldName == null)
           fieldName = '*'
-        key = typeof key === 'string' ? pool.escape(key) : key;
+
+        if(typeof key === 'string')
+        key = pool.escape(key);
         
-        query = `SELECT ${fieldName} FROM projectxdb.${tableName} WHERE character = ${key};`;
+        query = `SELECT ${fieldName} FROM projectxdb.characterinfo WHERE type = ${key};`;
         console.log(query);
 
         const results = await new Promise((resolve, reject) => {
@@ -34,8 +36,6 @@ const pool = createPool({
               if (Array.isArray(results) && results.length < 2) {
                 results = results[0];
               }
-            
-              console.log(results);
               resolve(results);
             }
           });
@@ -147,5 +147,6 @@ const pool = createPool({
           SetData,
           IsRowExists,
           CheckData,
-          InsertData
+          InsertData,
+          GetCharacterData
       };

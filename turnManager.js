@@ -1,9 +1,11 @@
 const activeMatches = require('./ActiveMatches')
 const communication = require('./communication')
-
+const userManager = require('./UserManager')
 exports.NextTurn = function(gameId){
     const match = activeMatches.GetMatch(gameId);
-    let newTurn = (match.turn++) % 2;
+    let newTurn = (match.turn + 1) % 2;
+    match.turn = newTurn;
 
-    communication.SendAll(gameId, 'SetTurn', newTurn)
+    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player1).client, 'SetTurn', newTurn)
+    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player2).client, 'SetTurn', newTurn)
 }

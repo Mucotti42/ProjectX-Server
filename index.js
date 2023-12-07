@@ -18,11 +18,22 @@ module.exports = server;
 
 server.on('listening', () =>
 {
+    var array = [];
+
+for (var i = -10; i <= 10; i++) {
+    array.push({ "x": i, "y": 0 });
+}
+
+console.log(JSON.stringify(array));
     console.log('WebSocket server is listening on port ' + wsPort)
-    const d = [0,3,5];
-    const c = [{"x":-1,"y":1},{"x":-1,"y":-1},{"x":1,"y":-1},{"x":1,"y":1}]    ;
-    const a = '[{1},{2},{3},{4}]';
-    db.SetData(dbTables.tableTypes.PLAYERINFO,dbTables.playerInfo.CHARACTERS,3,JSON.stringify(c))
+    // const d = [0,3,5];
+    // const c = [{"x":-1,"y":1},{"x":-1,"y":-1},{"x":1,"y":-1},{"x":1,"y":1}]    ;
+    // const a = '[{1},{2},{3},{4}]';
+    // db.SetData(dbTables.tableTypes.PLAYERINFO,dbTables.playerInfo.CHARACTERS,3,JSON.stringify(c))
+
+    db.GetCharacterData(dbTables.characterTypes.MUSHROOM, null, (data) => {
+        console.log('returning value with call back' + data.healcoords);
+      });
 })
 //-------------------------------------
 

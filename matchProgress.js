@@ -4,18 +4,24 @@ const gameStates = require('./gameStates').States
 const database = require('./database')
 const dbTables = require('./dbTables')
 const userManager = require('./UserManager')
+const turnManager = require('./turnManager')
 
-class Piece{
-    constructor(pieceId, pieceType, piecePos, health, damage){
-        this.pieceId = pieceId;
-        this.pieceType = pieceType;
-        this.piecePos = piecePos;
-        this.health = health;
-        this.isAlive = true;
-        this.damage = damage;
-        //TODO this.pieceStates = new Array[];
+class PieceInfo {
+    constructor(id, type, health, maxHealth, healAmount, coordinate, damage, attackCoordinates, movementCoordinates, healCoordinates, ally) {
+      this.id = id;
+      this.type = type;
+      this.health = health;
+      this.maxHealth = maxHealth;
+      this.healAmount = healAmount;
+      this.coordinate = coordinate;
+      this.damage = damage;
+      this.attackCoordinates = attackCoordinates;
+      this.movementCoordinates = movementCoordinates;
+      this.healCoordinates = healCoordinates;
+      this.ally = ally;
     }
-}
+  }
+const playerPieces = new Map();
 
 exports.StartMatch = function (match){
     setTimeout(() => {
@@ -23,8 +29,29 @@ exports.StartMatch = function (match){
       }, 1000);
 }
 
-exports.Placement = function (matchId,pieceType,position){
-    //communication.SendAll(matchId, )
+exports.Placement = function (matchId,playerId,pieceType,position){
+    var match = activeMatches.GetMatch(matchId);
+    database.GetCharacterData(pieceType, null, (data) => {
+        var id = Math.floor(100000 + Math.random() * 900000);
+        
+        var piece = new PieceInfo(id,pieceType,data.health,data.maxhealth,data.healamount,position,data.damage,
+            data.attackcoords,data.movecoords,data.healcoords, true);
+        
+        let players = match.players;
+        //OtherPlayer
+        console.log(players[players.indexOf(playerId) ^ 1])
+        for (let i = 0; i < players.length; i++) {
+            let player = players[i];
+            
+            piece.ally = player == playerId;
+
+            let client = userManager.GetPlayerWithPrimaryKey(player).client;
+
+            communication.SendPackage(client,'PiecePlaced',piece)
+
+            playerPieces.get(playerId).set(id, piece);
+        }
+      });
 }
 
 exports.SetPlacementState = async function(matchId){
@@ -35,13 +62,46 @@ exports.SetPlacementState = async function(matchId){
         getPlayerCharacterData(match.player1),
         getPlayerCharacterData(match.player2)
     ]);
-
+    InitializePieceMap(match.player1); InitializePieceMap(match.player2);
     communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player1).client,'PlacementState',data1)
     communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player2).client,'PlacementState',data2)
     
     activeMatches.SetMatchState(matchId,gameStates.PLACEMENT)
+
+    setTimeout(() => {
+        this.SetGameplayState(match.gameId);
+      }, 30000);
+}
+function InitializePieceMap(playerId) {
+    if(playerPieces.has(playerId))
+        playerPieces.delete(playerId);
+    playerPieces.set(playerId, new Map())
 }
 
 async function getPlayerCharacterData(playerId) {
     return await database.GetData(dbTables.tableTypes.PLAYERINFO, dbTables.playerInfo.CHARACTERS, playerId);
+}
+
+exports.SetGameplayState = async function(matchId){
+    var match = activeMatches.GetMatch(matchId);
+
+    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player1).client,'GameplayState',0)
+    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player2).client,'GameplayState',1)
+    
+    activeMatches.SetMatchState(matchId,gameStates.PLAYING)
+}
+
+exports.Move = async function(playerId,matchId, moveType,pieceId,coord){
+    var match = activeMatches.GetMatch(matchId);
+    let players = match.players;
+    let otherClient = userManager.GetPlayerWithPrimaryKey(players[players.indexOf(playerId) ^ 1]).client;
+    var data = {
+        type: moveType,
+        pieceId: pieceId,
+        targetCoord: coord
+    };
+    communication.SendPackage(otherClient,'PieceMove',data);
+}
+exports.NextTurn = async function(matchid){
+    turnManager.NextTurn('1')
 }

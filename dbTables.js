@@ -43,4 +43,4 @@ const characterProperties = {
   VARIABLE1:'variable1',
   VARIABLE2:'variable2'
 }
-module.exports = { tableTypes, playerInfo };
+module.exports = { tableTypes, playerInfo,characterTypes };

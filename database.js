@@ -1,18 +1,18 @@
 const {createPool} = require('mysql')
 //Local
-const pool = createPool({
-    host: "localhost",
-    user: "root",
-    password: "626300",
-    connectionLimit: 10
-})
-//Server
 // const pool = createPool({
-//   host: "localhost",
-//   user: "root",
-//   password: "Celestial01!",
-//   connectionLimit: 10
+//     host: "localhost",
+//     user: "root",
+//     password: "626300",
+//     connectionLimit: 10
 // })
+//Server
+const pool = createPool({
+  host: "localhost",
+  user: "root",
+  password: "Celestial01!",
+  connectionLimit: 10
+})
 
       async function GetCharacterData(key, fieldName = null,  callback = null) {
 

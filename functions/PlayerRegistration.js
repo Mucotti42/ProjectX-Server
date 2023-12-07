@@ -23,12 +23,14 @@ exports.RegisterPlayer = async function(client,data){
             playerRank : 50
         };
         await db.InsertData(dbFields.tableTypes.PLAYERINFO,userdata);
-
+        
         db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.PRIMARYKEY, data.key,'apiId',
             (data) => {
                 communication.SendPackage(client,'SavePrimaryKey',data)
                 console.log('Player primary ID sent succesfully!')
                 key = data.primaryKey;
+                const d = [0, 1, 2, 5, 7, 10]
+                db.SetData(dbFields.tableTypes.PLAYERINFO,dbFields.playerInfo.CHARACTERS,key,JSON.stringify(d))
                 userManager.RegisterPlayerInfo(key,client)
               })
     }

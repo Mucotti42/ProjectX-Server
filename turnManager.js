@@ -1,8 +1,11 @@
 const activeMatches = require('./ActiveMatches')
 const communication = require('./communication')
 const userManager = require('./UserManager')
+
 exports.NextTurn = function(gameId){
     const match = activeMatches.GetMatch(gameId);
+    if(match == null) return;
+
     let newTurn = (match.turn + 1) % 2;
     match.turn = newTurn;
 

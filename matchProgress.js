@@ -36,16 +36,17 @@ exports.Placement = function (matchId,playerId,pieceType,position){
         
         var piece = new PieceInfo(id,pieceType,data.health,data.maxhealth,data.healamount,position,data.damage,
             data.attackcoords,data.movecoords,data.healcoords, true);
-        
+
+        if(match == null) return;
         let players = match.players;
         //OtherPlayer
         console.log(players[players.indexOf(playerId) ^ 1])
         for (let i = 0; i < players.length; i++) {
-            let player = players[i];
+            const player = players[i];
             
             piece.ally = player == playerId;
 
-            let client = userManager.GetPlayerWithPrimaryKey(player).client;
+            const client = userManager.GetPlayerWithPrimaryKey(player).client;
 
             communication.SendPackage(client,'PiecePlaced',piece)
 
@@ -93,6 +94,8 @@ exports.SetGameplayState = async function(matchId){
 
 exports.Move = async function(playerId,matchId, moveType,pieceId,coord){
     var match = activeMatches.GetMatch(matchId);
+    if(match == null) return;
+
     let players = match.players;
     let otherClient = userManager.GetPlayerWithPrimaryKey(players[players.indexOf(playerId) ^ 1]).client;
     var data = {
@@ -104,4 +107,20 @@ exports.Move = async function(playerId,matchId, moveType,pieceId,coord){
 }
 exports.NextTurn = async function(matchid){
     turnManager.NextTurn('1')
+}
+
+exports.GetCharacterData = async function (client)
+{
+    database.GetCharacterData(null, null, (piece) => {
+        const pieces = []
+        piece.forEach((data) => {
+            var id = Math.floor(100000 + Math.random() * 900000);
+            var piece = new PieceInfo(id,data.type,data.health,data.maxhealth,data.healamount,{"x": 0, "y": 0},data.damage,
+                data.attackcoords,data.movecoords,data.healcoords, true);
+
+            pieces.push(piece)
+        })
+
+        communication.SendPackage(client,'CharacterData',pieces)
+    });
 }

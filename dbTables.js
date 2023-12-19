@@ -14,7 +14,7 @@ const playerInfo = {
   USERNAME: 'userName',
   DATETIME: 'dateTime',
   MAIL: 'email',
-  APIID: 'apiId',
+  APIID: 'apiID',
   RANK: 'playerRank',
   CHARACTERS: 'characters'
 }

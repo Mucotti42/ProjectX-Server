@@ -1,19 +1,26 @@
 const {createPool} = require('mysql')
-//Local
-const pool = createPool({
+
+const os = require('os');
+
+let pool;
+console.log(os.platform())
+if (os.platform() === 'win32') {
+  // Windows environment
+  pool = createPool({
     host: "localhost",
     user: "root",
     password: "626300",
     connectionLimit: 10
-})
-//Server
-// const pool = createPool({
-//   host: "localhost",
-//   user: "root",
-//   password: "Celestial01!",
-//   connectionLimit: 10
-// })
-
+  });
+} else {
+  // Assume it's a Linux environment
+  pool = createPool({
+    host: "localhost",
+    user: "root",
+    password: "Celestial01!",
+    connectionLimit: 10
+  });
+}
       async function GetCharacterData(key = null, fieldName = null,  callback = null) {
 
         if(fieldName === null)
@@ -22,6 +29,7 @@ const pool = createPool({
         if(typeof key === 'string')
         key = pool.escape(key);
         console.log(key === null)
+        let query = '';
         if(key === null)
           query = `SELECT ${fieldName} FROM projectxdb.characterinfo;`
         else
@@ -51,13 +59,18 @@ const pool = createPool({
 
         return results;
 }
-      async function GetData(tableName, fieldName, key, queryWith = 'primaryKey', callback = null) {
-        // Escape key if it's a string
-        console.log('isString: ');
-        console.log(typeof key === 'string');
+      async function GetData(tableName, fieldName = null, key = null, queryWith = 'primaryKey', callback = null) {
+
+        if(fieldName === null)
+          fieldName = '*'
+
         key = typeof key === 'string' ? pool.escape(key) : key;
 
-        const query = `SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = ${key};`;
+        let query = '';
+        if(key === null)
+            query = `SELECT ${fieldName} FROM projectxdb.${tableName}`;
+        else
+            query = `SELECT ${fieldName} FROM projectxdb.${tableName} WHERE ${queryWith} = ${key};`;
         console.log(query);
       
         const results = await new Promise((resolve, reject) => {
@@ -88,6 +101,34 @@ const pool = createPool({
         return results;
       }
 
+async function GetDataWithQuery(query, callback = null) {
+  const results = await new Promise((resolve, reject) => {
+    pool.query(query, (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        console.log('results:');
+        console.log(results);
+        console.log('is array ' + Array.isArray(results));
+        console.log('length ' + results.length);
+
+        if (Array.isArray(results) && results.length < 2) {
+          results = results[0];
+        }
+
+        console.log(results);
+        resolve(results);
+      }
+    });
+  });
+
+  // Call the callback function after retrieving data
+  if (callback) {
+    callback(results);
+  }
+
+  return results;
+}
 async function IsRowExists(tableName, key, queryWith = 'primaryKey',callback = null) {
   // Escape key if it's a string
   console.log('isString: ');
@@ -164,5 +205,6 @@ async function IsRowExists(tableName, key, queryWith = 'primaryKey',callback = n
           IsRowExists,
           CheckData,
           InsertData,
-          GetCharacterData
+          GetCharacterData,
+          GetDataWithQuery
       };

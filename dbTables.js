@@ -3,7 +3,8 @@ const tableTypes = {
   PLAYERINFO:'playerinfo',
   DEVICEINFO:'deviceinfo',
   SESSIONINFO:'sessioninfo',
-  CHARACTERINFO:'characterinfo'
+  CHARACTERINFO:'characterinfo',
+  MARKETPIECEINFO:'marketpieceinfo'
 }
 
 const playerInfo = {
@@ -31,16 +32,5 @@ const characterTypes = {
   HORTLAK:'hortlak',
   THEKING:'theking'
 }
-const characterProperties = {
-  TYPE:'type',
-  HEALTH:'health',
-  MAXHEALTH:'maxhealth',
-  DAMAGE:'damage',
-  HEALAMOUNT:'healamount',
-  HEALCOORDS:'healcoords',
-  MOVECOORDS:'movecoords',
-  ATTACKCOORDS:'attackcoords',
-  VARIABLE1:'variable1',
-  VARIABLE2:'variable2'
-}
+
 module.exports = { tableTypes, playerInfo,characterTypes };

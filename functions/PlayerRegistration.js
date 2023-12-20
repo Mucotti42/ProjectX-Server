@@ -12,7 +12,7 @@ exports.RegisterPlayer = async function(client,data){
     {
         console.log('User exist')
         
-        db.GetData(dbFields.tableTypes.PLAYERINFO, '*', data.key, dbFields.playerInfo.APIID,
+        db.GetData(dbFields.tableTypes.PLAYERINFO, null, data.key, dbFields.playerInfo.APIID,
         (incomingdata) => {
             console.log('returning value with call back' + incomingdata.userName);
             userManager.RegisterPlayerInfo(incomingdata.primaryKey,client)
@@ -45,6 +45,10 @@ exports.RegisterPlayer = async function(client,data){
                 userManager.RegisterPlayerInfo(key,client)
             })
     }
+    db.GetDataWithQuery('SELECT projectxdb.marketpieceinfo.*, projectxdb.characterinfo.damage, projectxdb.characterinfo.health FROM projectxdb.marketpieceinfo' +
+        ' JOIN projectxdb.characterinfo ON projectxdb.marketpieceinfo.id = projectxdb.characterinfo.type;', (data)=>{
+        communication.SendPackage(client,'RegisterMarketPieces',data)
+    })
     communication.SendPackage(client,'CompleteRegistration',newPlayer)
 }
 exports.Disconnect = async function(){

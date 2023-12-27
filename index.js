@@ -40,6 +40,5 @@ server.on('connection',(client) =>
 
         matchmakingHandler.EndMatchmaking(client,1)
         userManager.DisconnectedPlayer(client)
-        //db.SetData('sessioninfo',)
     });
 })

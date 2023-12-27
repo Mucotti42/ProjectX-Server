@@ -24,9 +24,8 @@ module.exports = {
         console.log('new player registered ' + primaryKey + ' ')
         console.log(playerInfoList.length)
     },
+
     DisconnectedPlayer: async function(client){
-        //TODO HANDLE DATABASE
-        const currentDate = new Date(Date.now());
         const player = this.GetPlayerWithClient(client);
         if(player == null) return;
 
@@ -65,6 +64,8 @@ module.exports = {
 
         if (foundPlayer)
             return foundPlayer;
+        else if(playerInfoList.length === 1)
+            return playerInfoList[0]
 
         console.log("No player id found ")
     }

@@ -27,7 +27,7 @@ exports.EndMatchmaking = function(client,data){
     if (playerIndex !== -1) {
     pool.splice(playerIndex, 1);
 }
-  }
+}
 
   
   let timer = setInterval(() => {

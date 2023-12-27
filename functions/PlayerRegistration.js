@@ -27,7 +27,7 @@ exports.RegisterPlayer = async function(client,data){
             userName: 'New Player',
             apiId: data.key,
             playerRank : 50,
-            characters : '[0, 1, 2, 3]'
+            characters : '[0, 1, 2, 3, 4, 5, 6, 7, 10]'
         };
         await db.InsertData(dbFields.tableTypes.PLAYERINFO,userdata);
         
@@ -39,6 +39,7 @@ exports.RegisterPlayer = async function(client,data){
                     enterance : '[]'
                 };
                 db.InsertData(dbFields.tableTypes.SESSIONINFO,sessionData);
+                console.log('insertdata' , sessionData)
                 //TODO Edit the code at the buttom line that is for testing purposes
                 //const d = [0, 1, 2, 5, 7, 10]
                 //db.SetData(dbFields.tableTypes.PLAYERINFO,dbFields.playerInfo.CHARACTERS,key,JSON.stringify(d))

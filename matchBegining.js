@@ -7,7 +7,7 @@ const Match = ActiveMatches.Match;
 exports.LoadMatch = function (player1, player2,gameMode) {
 
     var map = Math.floor(Math.random() * 1);
-    var gameId = '1'; //TODO UUID
+    var gameId = Math.floor(100000 + Math.random() * 900000).toString();
     
     var match = new Match(player1,player2,gameMode,map,gameId)
     ActiveMatches.SetMatch(gameId,match)

@@ -27,7 +27,7 @@ exports.RegisterPlayer = async function(client,data){
             userName: 'New Player',
             apiId: data.key,
             playerRank : 50,
-            characters : '[0, 1, 2, 3, 4, 5, 6, 7, 10]'
+            characters : '[0, 1, 2, 3, 4, 5, 6, 7, 8, 10]'
         };
         await db.InsertData(dbFields.tableTypes.PLAYERINFO,userdata);
         

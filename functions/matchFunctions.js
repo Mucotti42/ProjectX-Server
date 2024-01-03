@@ -17,5 +17,5 @@ exports.PieceMove = function (client,data) {
     matchProgress.Move(userManager.GetPlayerWithClient(client).primaryKey,data.matchId,data.moveType,data.pieceId,data.coord);
 }
 exports.EndTurn = function(client,data){
-    matchProgress.NextTurn(data)
+    matchProgress.NextTurn(data.value)
 }

@@ -89,7 +89,7 @@ exports.SetGameplayState = async function(matchId){
 
     communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player1).client,'GameplayState',0)
     communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player2).client,'GameplayState',1)
-    
+
     activeMatches.SetMatchState(matchId,gameStates.PLAYING)
 }
 
@@ -107,7 +107,7 @@ exports.Move = async function(playerId,matchId, moveType,pieceId,coord){
     communication.SendPackage(otherClient,'PieceMove',data);
 }
 exports.NextTurn = async function(matchid){
-    turnManager.NextTurn('1')
+    turnManager.NextTurn(matchid)
 }
 
 exports.GetCharacterData = async function (client)

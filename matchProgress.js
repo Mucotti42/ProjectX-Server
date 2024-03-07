@@ -72,7 +72,7 @@ exports.SetPlacementState = async function(matchId){
 
     setTimeout(() => {
         this.SetGameplayState(match.gameId);
-      }, 30000);
+      }, 300000);
 }
 function InitializePieceMap(playerId) {
     if(playerPieces.has(playerId))

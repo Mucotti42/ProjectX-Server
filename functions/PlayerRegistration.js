@@ -8,14 +8,18 @@ exports.RegisterPlayer = async function(client,data){
     const isExist = await db.IsRowExists(dbFields.tableTypes.PLAYERINFO,data.key,dbFields.playerInfo.APIID);
     console.log('exist' , isExist)
     let newPlayer = false;
+    const socialId = Math.floor(100000 + Math.random() * 900000).toString();
+    let userName = "New Player";
+    let apiId = data.key;
     if(isExist)
     {
         console.log('User exist')
         
         db.GetData(dbFields.tableTypes.PLAYERINFO, null, data.key, dbFields.playerInfo.APIID,
         (incomingdata) => {
+            userName = incomingdata.userName;
             console.log('returning value with call back' + incomingdata.userName);
-            userManager.RegisterPlayerInfo(incomingdata.primaryKey,client)
+            userManager.RegisterPlayerInfo(incomingdata.primaryKey, client, socialId)
         })
     }
     else
@@ -43,14 +47,20 @@ exports.RegisterPlayer = async function(client,data){
                 //TODO Edit the code at the buttom line that is for testing purposes
                 //const d = [0, 1, 2, 5, 7, 10]
                 //db.SetData(dbFields.tableTypes.PLAYERINFO,dbFields.playerInfo.CHARACTERS,key,JSON.stringify(d))
-                userManager.RegisterPlayerInfo(key,client)
+                userManager.RegisterPlayerInfo(key, client, socialId)
             })
     }
     db.GetDataWithQuery('SELECT projectxdb.marketpieceinfo.*, projectxdb.characterinfo.damage, projectxdb.characterinfo.health FROM projectxdb.marketpieceinfo' +
         ' JOIN projectxdb.characterinfo ON projectxdb.marketpieceinfo.id = projectxdb.characterinfo.type;', (data)=>{
         communication.SendPackage(client,'RegisterMarketPieces',data)
     })
-    communication.SendPackage(client,'CompleteRegistration',newPlayer)
+    var data = {
+        newPlayer: newPlayer,
+        socialId: socialId,
+        userName: userName,
+        apiId : data.key
+    };
+    communication.SendPackage(client,'CompleteRegistration',data)
 }
 exports.Disconnect = async function(){
         

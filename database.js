@@ -61,10 +61,14 @@ if (os.platform() === 'win32') {
 }
       async function GetData(tableName, fieldName = null, key = null, queryWith = 'primaryKey', callback = null) {
 
+        console.log("key 2" , key)
+
         if(fieldName === null)
           fieldName = '*'
 
         key = typeof key === 'string' ? pool.escape(key) : key;
+
+        console.log("key 3" , key)
 
         let query = '';
         if(key === null)

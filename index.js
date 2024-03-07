@@ -25,6 +25,7 @@ server.on('listening', () =>
 //Client Connection -------------------
 server.on('connection',(client) =>
 {
+    console.log(client)
     userManager.Welcome(client)
     client.on('message', (message)=>
     {
@@ -32,7 +33,7 @@ server.on('connection',(client) =>
         let data = JSON.parse(message);
         console.log(data.type)
         
-        messageHandlers.handleMessage(data.type,client,data);        
+        messageHandlers.handleMessage(data.type,client,data);
     })
 
     client.on('close', (code, reason) => {

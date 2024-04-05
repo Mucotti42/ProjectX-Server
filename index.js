@@ -2,9 +2,6 @@ const messageHandlers = require('./messageHandler');
 const WebSocket = require('ws')
 const userManager = require('./UserManager')
 const matchmakingHandler = require('./matchmakingHandler.js')
-const db = require("./database");
-const dbTables = require('./dbTables.js')
-
 
 const wsPort = 8080
 
@@ -25,14 +22,14 @@ server.on('listening', () =>
 //Client Connection -------------------
 server.on('connection',(client) =>
 {
-    console.log(client)
     userManager.Welcome(client)
+    console.log('Player connected');
     client.on('message', (message)=>
     {
-        console.log('Player connected:', message);
         let data = JSON.parse(message);
         console.log(data.type)
-        
+        console.log(data)
+
         messageHandlers.handleMessage(data.type,client,data);
     })
 

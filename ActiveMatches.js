@@ -18,8 +18,6 @@ exports.Match = class{
 const matches = new Map();
 
 exports.GetMatch = function (gameId) {
-    console.log(gameId)
-    console.log(matches)
     let match = matches.get(gameId);
     if(match)
         return match;
@@ -37,4 +35,11 @@ exports.SetMatch = function (gameId, match) {
 
 exports.SetMatchState = function(gameId, state){
     this.GetMatch(gameId).gameState = state;
+}
+
+exports.EndMatch = function(gameId){
+    if(matches.has(gameId)){
+        matches.delete(gameId)
+        console.log('Game End with gameId : ', gameId)
+    }
 }

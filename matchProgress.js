@@ -57,8 +57,9 @@ exports.Placement = function (matchId,playerId,pieceType,position){
 }
 
 exports.SetPlacementState = async function(matchId){
-    //communication.SendAll(matchId, 'PlacementState')
     var match = activeMatches.GetMatch(matchId);
+    if(match.gameState != gameStates.LOADED) return;
+    match.readyPlayerList = new Array();
 
     const [data1, data2] = await Promise.all([
         getPlayerCharacterData(match.player1),
@@ -72,7 +73,9 @@ exports.SetPlacementState = async function(matchId){
 
     setTimeout(() => {
         this.SetGameplayState(match.gameId);
-      }, 30000);
+      }, 90000);
+
+    //TODO 90000
 }
 function InitializePieceMap(playerId) {
     if(playerPieces.has(playerId))
@@ -86,6 +89,9 @@ async function getPlayerCharacterData(playerId) {
 
 exports.SetGameplayState = async function(matchId){
     var match = activeMatches.GetMatch(matchId);
+    if(match == null) return;
+
+    if(match.gameState != gameStates.PLACEMENT) return;
 
     communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player1).client,'GameplayState',0)
     communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player2).client,'GameplayState',1)
@@ -108,6 +114,18 @@ exports.Move = async function(playerId,matchId, moveType,pieceId,coord){
 }
 exports.NextTurn = async function(matchid){
     turnManager.NextTurn(matchid)
+}
+
+exports.PlacementReady = function (playerId, matchId){
+    var match = activeMatches.GetMatch(matchId);
+    match.readyPlayerList.push(playerId);
+    if(match.readyPlayerList.length == 2)
+        this.SetGameplayState(matchId);
+}
+
+exports.PlacementUnready = function (playerId, matchId){
+    var match = activeMatches.GetMatch(matchId);
+    match.readyPlayerList.splice(playerId,1);
 }
 
 exports.GetCharacterData = async function (client)

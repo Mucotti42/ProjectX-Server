@@ -3,6 +3,8 @@ const communication = require('./communication.js')
 const matchProgress = require('./matchProgress.js');
 const ActiveMatches = require('./ActiveMatches.js')
 const Match = ActiveMatches.Match;
+const gameStates = require('./gameStates').States
+
 
 exports.LoadMatch = function (player1, player2,gameMode) {
 
@@ -25,8 +27,11 @@ exports.PlayerSceneLoaded = function(primaryKey, gameId){
     const match = ActiveMatches.GetMatch(gameId);
     match.readyPlayerList.push(primaryKey)
 
-    if(match.readyPlayerList.length == 2)
+    if(match.readyPlayerList.length == 2){
+
+        ActiveMatches.SetMatchState(gameId, gameStates.LOADED)
         matchProgress.StartMatch(match);
+    }
 }
 
 exports.EndGame = function (player1, player2,gameMode) {

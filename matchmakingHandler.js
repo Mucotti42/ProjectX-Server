@@ -37,7 +37,6 @@ exports.EndMatchmaking = function(client,data){
         if (player.primaryKey === otherPlayer.primaryKey) 
             continue;
 
-            console.log((player.range + otherPlayer.range) - Math.abs(player.rank - otherPlayer.rank))
         if (Math.abs(player.rank - otherPlayer.rank) <= player.range + otherPlayer.range) {
             matchBegining.LoadMatch(player.primaryKey,otherPlayer.primaryKey,player.gameMode)
 

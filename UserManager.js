@@ -38,18 +38,12 @@ module.exports = {
         const data = JSON.parse(session.enterance);
         data.push(jsonData);
         db.SetData('sessioninfo', 'enterance',player.primaryKey,JSON.stringify(data))
-        //console.log(JSON.stringify(session));
 
-        console.log('Previous Player Count: ',playerInfoList.length)
         if(playerInfoList.includes(player))
             playerInfoList.splice(player,1);
-
-        console.log('Current Player Count: ',playerInfoList.length)
     },
 
     GetPlayerWithPrimaryKey: function(primaryKey){
-        console.log('find player with primaryKey : ', primaryKey)
-        console.log(playerInfoList)
         const foundPlayer = playerInfoList.find(player => player.primaryKey === primaryKey);
 
         if(foundPlayer)
@@ -59,19 +53,16 @@ module.exports = {
     },
 
     GetPlayerWithSocialId: function(socialId){
-        console.log('find player with socialId : ', socialId)
         const foundPlayer = playerInfoList.find(player => player.socialId === socialId);
 
         if(foundPlayer)
             return foundPlayer
 
-        console.log(playerInfoList);
         console.log('No player found with social id: ' + socialId)
     },
 
     GetPlayerWithClient: function(client){
 
-        console.log('Info list Player Count: ',playerInfoList.length)
         const foundPlayer = playerInfoList.find(player => player.client === client);
 
         if (foundPlayer)

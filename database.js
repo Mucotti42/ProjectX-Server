@@ -28,7 +28,6 @@ if (os.platform() === 'win32') {
 
         if(typeof key === 'string')
         key = pool.escape(key);
-        console.log(key === null)
         let query = '';
         if(key === null)
           query = `SELECT ${fieldName} FROM projectxdb.characterinfo;`
@@ -42,9 +41,6 @@ if (os.platform() === 'win32') {
             if (error) {
               reject(error);
             } else {
-              console.log('ch data results:');
-              console.log(results);
-            
               if (Array.isArray(results) && results.length < 2) {
                 results = results[0];
               }
@@ -61,14 +57,10 @@ if (os.platform() === 'win32') {
 }
       async function GetData(tableName, fieldName = null, key = null, queryWith = 'primaryKey', callback = null) {
 
-        console.log("key 2" , key)
-
         if(fieldName === null)
           fieldName = '*'
 
         key = typeof key === 'string' ? pool.escape(key) : key;
-
-        console.log("key 3" , key)
 
         let query = '';
         if(key === null)
@@ -82,16 +74,11 @@ if (os.platform() === 'win32') {
             if (error) {
               reject(error);
             } else {
-              console.log('results:');
-              console.log(results);
-              console.log('is array ' + Array.isArray(results));
-              console.log('length ' + results.length);
 
               if (Array.isArray(results) && results.length < 2) {
                 results = results[0];
               }
 
-              console.log(results);
               resolve(results);
             }
           });
@@ -111,16 +98,10 @@ async function GetDataWithQuery(query, callback = null) {
       if (error) {
         reject(error);
       } else {
-        console.log('results:');
-        console.log(results);
-        console.log('is array ' + Array.isArray(results));
-        console.log('length ' + results.length);
-
         if (Array.isArray(results) && results.length < 2) {
           results = results[0];
         }
 
-        console.log(results);
         resolve(results);
       }
     });
@@ -135,8 +116,6 @@ async function GetDataWithQuery(query, callback = null) {
 }
 async function IsRowExists(tableName, key, queryWith = 'primaryKey',callback = null) {
   // Escape key if it's a string
-  console.log('isString: ');
-  console.log(typeof key === 'string');
   key = typeof key === 'string' ? pool.escape(key) : key;
 
   const query = `SELECT COUNT(*) as count FROM projectxdb.${tableName} WHERE ${queryWith} = ${key};`;
@@ -149,12 +128,10 @@ async function IsRowExists(tableName, key, queryWith = 'primaryKey',callback = n
       } else {
 
         const count = _results[0].count;
-        console.log(count);
         if (callback) {
           callback(count);
         }
         resolve(_results);
-        console.log('var mı ', count>0)
         isExist = count > 0;
       }
     });
@@ -192,7 +169,6 @@ async function IsRowExists(tableName, key, queryWith = 'primaryKey',callback = n
             const values = Object.values(data).map(value => (value === 'UUID()' ? value : pool.escape(value))).join(', ');
           
               const query = `INSERT INTO projectxdb.${tableName} (${fields}) VALUES (${values})`;
-              console.log('Insert Data query: ',query)
             pool.query(query, (error, results) => {
               if (error) {
                 reject(error);

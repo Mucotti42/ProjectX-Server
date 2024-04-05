@@ -6,19 +6,19 @@ const userManager = require('../UserManager.js')
 exports.RegisterPlayer = async function(client,data){
 
     const isExist = await db.IsRowExists(dbFields.tableTypes.PLAYERINFO,data.key,dbFields.playerInfo.APIID);
-    console.log('exist' , isExist)
     let newPlayer = false;
     const socialId = Math.floor(100000 + Math.random() * 900000).toString();
     let userName = "New Player";
-    let apiId = data.key;
+    const apiId = data.key;
+    let primaryKey = "";
+
     if(isExist)
     {
-        console.log('User exist')
-        
-        db.GetData(dbFields.tableTypes.PLAYERINFO, null, data.key, dbFields.playerInfo.APIID,
+        await db.GetData(dbFields.tableTypes.PLAYERINFO, null, data.key, dbFields.playerInfo.APIID,
         (incomingdata) => {
             userName = incomingdata.userName;
-            console.log('returning value with call back' + incomingdata.userName);
+            console.log('returning value with call back ' + incomingdata.primaryKey);
+            primaryKey = incomingdata.primaryKey;
             userManager.RegisterPlayerInfo(incomingdata.primaryKey, client, socialId)
         })
     }
@@ -37,17 +37,16 @@ exports.RegisterPlayer = async function(client,data){
         
         db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.PRIMARYKEY, data.key, dbFields.playerInfo.APIID,
             (data) => {
-                key = data.primaryKey;
+                primaryKey = data.primaryKey;
                 const sessionData ={
-                    primaryKey : key,
+                    primaryKey : primaryKey,
                     enterance : '[]'
                 };
                 db.InsertData(dbFields.tableTypes.SESSIONINFO,sessionData);
-                console.log('insertdata' , sessionData)
                 //TODO Edit the code at the buttom line that is for testing purposes
                 //const d = [0, 1, 2, 5, 7, 10]
                 //db.SetData(dbFields.tableTypes.PLAYERINFO,dbFields.playerInfo.CHARACTERS,key,JSON.stringify(d))
-                userManager.RegisterPlayerInfo(key, client, socialId)
+                userManager.RegisterPlayerInfo(primaryKey, client, socialId)
             })
     }
     db.GetDataWithQuery('SELECT projectxdb.marketpieceinfo.*, projectxdb.characterinfo.damage, projectxdb.characterinfo.health FROM projectxdb.marketpieceinfo' +
@@ -58,8 +57,10 @@ exports.RegisterPlayer = async function(client,data){
         newPlayer: newPlayer,
         socialId: socialId,
         userName: userName,
-        apiId : data.key
+        apiId : data.key,
+        primaryKey : primaryKey
     };
+    console.log(data);
     communication.SendPackage(client,'CompleteRegistration',data)
 }
 exports.Disconnect = async function(){

@@ -112,6 +112,20 @@ exports.Move = async function(playerId,matchId, moveType,pieceId,coord){
     };
     communication.SendPackage(otherClient,'PieceMove',data);
 }
+
+exports.ChangeLocation = function (primaryKey, matchId, pieceId, targetCoord){
+    var match = activeMatches.GetMatch(matchId);
+    if(match == null) return;
+
+    let players = match.players;
+    let otherClient = userManager.GetPlayerWithPrimaryKey(players[players.indexOf(playerId) ^ 1]).client;
+    var data = {
+        pieceId: pieceId,
+        targetCoord: targetCoord
+    };
+    communication.SendPackage(otherClient,'LocationChanged',data);
+}
+
 exports.NextTurn = async function(matchid){
     turnManager.NextTurn(matchid)
 }

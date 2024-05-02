@@ -40,6 +40,9 @@ exports.PieceMove = function (client,data) {
     matchProgress.Move(userManager.GetPlayerWithClient(client).primaryKey,data.matchId,data.moveType,data.pieceId,data.coord);
 }
 
+exports.ChangeLocation = function (client, data){
+    matchProgress.ChangeLocation(userManager.GetPlayerWithClient(client).primaryKey,data.matchId, data.pieceId, data.targetCoord);
+}
 exports.EndTurn = function(client,data){
     matchProgress.NextTurn(data.value)
 }

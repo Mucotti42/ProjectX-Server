@@ -89,12 +89,22 @@ async function getPlayerCharacterData(playerId) {
 
 exports.SetGameplayState = async function(matchId){
     var match = activeMatches.GetMatch(matchId);
-    if(match == null) return;
+    if(match === null) return;
+    var player1 = userManager.GetPlayerWithPrimaryKey(match.player1);
+    var player2 = userManager.GetPlayerWithPrimaryKey(match.player2);
 
     if(match.gameState != gameStates.PLACEMENT) return;
-
-    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player1).client,'GameplayState',0)
-    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player2).client,'GameplayState',1)
+    if(player1.client === null || player2.client === null){
+        activeMatches.EndMatch(matchId);
+        return;
+    }
+    var data ={
+        localIndex : 0,
+        matchId : match.gameId
+    };
+    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player1).client,'GameplayState',data)
+    data.localIndex = 1;
+    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(match.player2).client,'GameplayState',data)
 
     activeMatches.SetMatchState(matchId,gameStates.PLAYING)
 }
@@ -118,12 +128,21 @@ exports.ChangeLocation = function (primaryKey, matchId, pieceId, targetCoord){
     if(match == null) return;
 
     let players = match.players;
-    let otherClient = userManager.GetPlayerWithPrimaryKey(players[players.indexOf(playerId) ^ 1]).client;
+    let otherClient = userManager.GetPlayerWithPrimaryKey(players[players.indexOf(primaryKey) ^ 1]).client;
     var data = {
         pieceId: pieceId,
         targetCoord: targetCoord
     };
     communication.SendPackage(otherClient,'LocationChanged',data);
+}
+
+exports.RemovePiece = function (primaryKey, matchId, pieceId){
+    var match = activeMatches.GetMatch(matchId);
+    if(match == null) return;
+
+    let players = match.players;
+    let otherClient = userManager.GetPlayerWithPrimaryKey(players[players.indexOf(primaryKey) ^ 1]).client;
+    communication.SendPackage(otherClient,'PieceRemoved',pieceId);
 }
 
 exports.NextTurn = async function(matchid){

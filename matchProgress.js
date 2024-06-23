@@ -7,9 +7,10 @@ const userManager = require('./UserManager')
 const turnManager = require('./turnManager')
 
 class PieceInfo {
-    constructor(id, type, health, maxHealth, healAmount, coordinate, damage, meleeattackCoordinates, rangedattackCoordinates, movementCoordinates, healCoordinates, ally) {
+    constructor(id, type, value, health, maxHealth, healAmount, coordinate, damage, meleeattackCoordinates, rangedattackCoordinates, movementCoordinates, healCoordinates, ally) {
       this.id = id;
       this.type = type;
+      this.value = value
       this.health = health;
       this.maxHealth = maxHealth;
       this.healAmount = healAmount;
@@ -35,7 +36,7 @@ exports.Placement = function (matchId,playerId,pieceType,position){
     database.GetCharacterData(pieceType, null, (data) => {
         var id = Math.floor(100000 + Math.random() * 900000);
         
-        var piece = new PieceInfo(id,pieceType,data.health,data.maxhealth,data.healamount,position,data.damage,
+        var piece = new PieceInfo(id,pieceType, data.value,data.health,data.maxhealth,data.healamount,position,data.damage,
             data.meleeattackcoords, data.rangedattackcoords,data.movecoords,data.healcoords, true);
 
         if(match == null) return;
@@ -167,7 +168,7 @@ exports.GetCharacterData = async function (client)
         const pieces = []
         piece.forEach((data) => {
             var id = Math.floor(100000 + Math.random() * 900000);
-            var piece = new PieceInfo(id,data.type,data.health,data.maxhealth,data.healamount,{"x": 0, "y": 0},data.damage,
+            var piece = new PieceInfo(id,data.type, data.value,data.health,data.maxhealth,data.healamount,{"x": 0, "y": 0},data.damage,
                 data.meleeattackcoords, data.rangedattackcoords,data.movecoords,data.healcoords, true);
 
             pieces.push(piece)

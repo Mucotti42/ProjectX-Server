@@ -94,6 +94,8 @@ exports.SetGameplayState = async function(matchId){
     var player1 = userManager.GetPlayerWithPrimaryKey(match.player1);
     var player2 = userManager.GetPlayerWithPrimaryKey(match.player2);
 
+    if(player1 == null) return;
+    if(player2 == null) return;
     if(match.gameState != gameStates.PLACEMENT) return;
     if(player1.client === null || player2.client === null){
         activeMatches.EndMatch(matchId);
@@ -151,7 +153,14 @@ exports.NextTurn = async function(matchid){
 }
 
 exports.PlacementReady = function (playerId, matchId){
+
     var match = activeMatches.GetMatch(matchId);
+    if(match == null) return;
+
+    let players = match.players;
+    let otherClient = userManager.GetPlayerWithPrimaryKey(players[players.indexOf(playerId) ^ 1]).client;
+    communication.SendPackage(otherClient,'OpponentReadyStatus',true);
+
     match.readyPlayerList.push(playerId);
     if(match.readyPlayerList.length == 2)
         this.SetGameplayState(matchId);
@@ -159,6 +168,12 @@ exports.PlacementReady = function (playerId, matchId){
 
 exports.PlacementUnready = function (playerId, matchId){
     var match = activeMatches.GetMatch(matchId);
+    if(match == null) return;
+
+    let players = match.players;
+    let otherClient = userManager.GetPlayerWithPrimaryKey(players[players.indexOf(playerId) ^ 1]).client;
+    communication.SendPackage(otherClient,'OpponentReadyStatus',false);
+
     match.readyPlayerList.splice(playerId,1);
 }
 

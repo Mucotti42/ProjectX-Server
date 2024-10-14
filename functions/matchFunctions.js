@@ -5,6 +5,7 @@ const activeMatches = require("../ActiveMatches")
 const communication = require("../communication")
 
 exports.GameSceneLoaded = function (client,data) {
+    if(userManager.GetPlayerWithClient(client) == null) return;
     matchBegining.PlayerSceneLoaded(userManager.GetPlayerWithClient(client).primaryKey, data.value)
 }
 
@@ -25,6 +26,8 @@ exports.EndGame = function (client,data) {
 }
 
 exports.Surrender = function (client,data) {
+    if(activeMatches.activeMatches.GetMatch(data.value) == null) return;
+
     const players = activeMatches.GetMatch(data.value).players;
     const loserId = userManager.GetPlayerWithClient(client).primaryKey;
     for (let i = 0; i < players.length; i++) {

@@ -26,6 +26,7 @@ exports.LoadMatch = function (player1, player2,gameMode) {
 
 exports.PlayerSceneLoaded = function(primaryKey, gameId){
     const match = ActiveMatches.GetMatch(gameId);
+    if(match == null) return;
     match.readyPlayerList.push(primaryKey)
 
     if(match.readyPlayerList.length == 2){

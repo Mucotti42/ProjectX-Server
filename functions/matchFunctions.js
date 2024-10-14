@@ -26,7 +26,7 @@ exports.EndGame = function (client,data) {
 }
 
 exports.Surrender = function (client,data) {
-    if(activeMatches.activeMatches.GetMatch(data.value) == null) return;
+    if(activeMatches.GetMatch(data.value) == null) return;
 
     const players = activeMatches.GetMatch(data.value).players;
     const loserId = userManager.GetPlayerWithClient(client).primaryKey;

@@ -13,13 +13,26 @@ exports.LoadMatch = function (player1, player2,gameMode) {
     var gameId = Math.floor(100000 + Math.random() * 900000).toString();
     
     var match = new Match(player1,player2,gameMode,map,gameId)
+
+    if(player1 == null || player2 == null)
+    {
+        console.log("Player no more active in Loadmatch Matchbegining")
+        return;
+    }
+
+    var p1 = userManager.GetPlayerWithPrimaryKey(player1);
+    var p2 = userManager.GetPlayerWithPrimaryKey(player2);
+
+    if(p1 == null || p2 == null)
+    {
+        console.log("p no more active in Loadmatch Matchbegining")
+        return;
+    }
+
     ActiveMatches.SetMatch(gameId,match)
 
-    var client1 = userManager.GetPlayerWithPrimaryKey(player1).client;
-    var client2 = userManager.GetPlayerWithPrimaryKey(player2).client;
-
-    communication.SendPackage(client1,'LoadMatch',match);
-    communication.SendPackage(client2,'LoadMatch',match);
+    communication.SendPackage(p1.client,'LoadMatch',match);
+    communication.SendPackage(p2.client,'LoadMatch',match);
 
     console.log('Match Loaded')
 }

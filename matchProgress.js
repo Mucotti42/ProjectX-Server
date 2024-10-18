@@ -90,7 +90,9 @@ async function getPlayerCharacterData(playerId) {
 
 exports.SetGameplayState = async function(matchId){
     var match = activeMatches.GetMatch(matchId);
-    if(match === null) return;
+    if(match == null) return;
+    if(match.player1 == null || match.player2 == null) return;
+
     var player1 = userManager.GetPlayerWithPrimaryKey(match.player1);
     var player2 = userManager.GetPlayerWithPrimaryKey(match.player2);
 

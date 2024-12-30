@@ -17,7 +17,7 @@ const playerInfo = {
   MAIL: 'email',
   APIID: 'apiID',
   RANK: 'playerRank',
-  CHARACTERS: 'characters'
+  CHARACTERS: 'characters',
 }
 const characterTypes = {
   MUSHROOM:'mushroom',

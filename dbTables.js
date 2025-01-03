@@ -18,6 +18,8 @@ const playerInfo = {
   APIID: 'apiID',
   RANK: 'playerRank',
   CHARACTERS: 'characters',
+  SOCIALID: 'socialId',
+  INCOMINGINVITES : 'incomingInvites'
 }
 const characterTypes = {
   MUSHROOM:'mushroom',

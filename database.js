@@ -119,7 +119,7 @@ async function IsRowExists(tableName, key, queryWith = 'primaryKey',callback = n
   key = typeof key === 'string' ? pool.escape(key) : key;
 
   const query = `SELECT COUNT(*) as count FROM projectxdb.${tableName} WHERE ${queryWith} = ${key};`;
-  console.log(query);
+  //console.log(query);
   let isExist;
   await new Promise((resolve, reject) => {
     pool.query(query, (error, _results) => {

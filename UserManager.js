@@ -4,11 +4,12 @@ const db = require('./database.js')
 
 
 class Player{
-    constructor(primaryKey, client, socialId){
+    constructor(primaryKey, client, socialId, userName){
         this.primaryKey = primaryKey
         this.client = client
-        this.enteranceTime = new Date(Date.now());
-        this.socialId = socialId;
+        this.enteranceTime = new Date(Date.now())
+        this.socialId = socialId
+        this.userName =  userName
     }
 }
 const playerInfoList = []  //Holds Player Info
@@ -19,8 +20,8 @@ module.exports = {
         communication.SendPackage(client,'Hi')
     },
     
-    RegisterPlayerInfo: function(primaryKey, client, socialId){
-        const p = new Player(primaryKey, client, socialId)
+    RegisterPlayerInfo: function(primaryKey, client, socialId, userName){
+        const p = new Player(primaryKey, client, socialId, userName)
         playerInfoList.push(p)
         console.log('new player registered ' + primaryKey + ' ')
         console.log(playerInfoList.length)
@@ -71,5 +72,13 @@ module.exports = {
             return playerInfoList[0]
 
         console.log("No player id found ")
-    }
+    },
+
+    IsPlayerOnline: function(socialId){
+        const foundPlayer = playerInfoList.find(player => player.socialId === socialId);
+
+        if(foundPlayer)
+            return true
+        return false
+    },
 }

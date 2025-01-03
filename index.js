@@ -12,9 +12,9 @@ const server = new WebSocket.Server({port: wsPort},()=>
 })
 
 module.exports = server;
-
 server.on('listening', () =>
 {
+    console.clear()
     console.log('WebSocket server is listening on port ' + wsPort)
 })
 //-------------------------------------

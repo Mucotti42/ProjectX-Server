@@ -73,8 +73,9 @@ exports.InviteAccepted = function (client, data) {
     matchBegining.LoadMatch(userManager.GetPlayerWithClient(client).primaryKey, data.value, 0)
 }
 
-exports.SteamFriendInviteAccepted = function (client, data) {
-    matchBegining.LoadMatch(userManager.GetPlayerWithClient(client).primaryKey, userManager.GetPlayerWithSocialId(data.value), 0)
+exports.SteamFriendInviteAccepted = async function (client, data) {
+    let key = await db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.PRIMARYKEY, data.value, dbFields.playerInfo.APIID)
+    matchBegining.LoadMatch(userManager.GetPlayerWithClient(client).primaryKey, key, 0)
 }
 
 exports.InviteDeclined = function (client, data) {

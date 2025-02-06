@@ -5,7 +5,7 @@ const matchBegining = require("../matchBegining");
 const matchProgress = require('../matchProgress')
 
 exports.setTest = function (client, data) {
-    matchBegining.LoadMatch(player.primaryKey,otherPlayer.primaryKey,player.gameMode)
+    matchBegining.LoadMatch(player.primaryKey,otherPlayer.primaryKey,player.gameMode,2)
 }
 
 exports.GetCharacterData = function (client,data){

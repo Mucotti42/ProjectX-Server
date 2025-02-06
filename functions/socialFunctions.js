@@ -70,12 +70,43 @@ exports.GameInvite = function (client, data) {
 }
 
 exports.InviteAccepted = function (client, data) {
-    matchBegining.LoadMatch(userManager.GetPlayerWithClient(client).primaryKey, data.value, 0)
+    // type = "InviteAccepted", inviterNick = data["nick"], playerNick = PlayerUtils.instance.localPlayer.userName, inviterKey = data["inviterKey"]};
+    var hostData = {
+        nick: data["playerNick"],
+        key: userManager.GetPlayerWithClient(client).primaryKey,
+        isHost : true
+    };
+    var playerData = {
+        nick: data["inviterNick"],
+        key: "",
+        isHost : false
+    };
+    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(data["inviterKey"]).client, "HostSettingMatch", hostData);
+    communication.SendPackage(client, "HostSettingMatch", playerData);
+}
+
+exports.ByGleir = function (client, data)
+{
+    matchBegining.LoadMatch(userManager.GetPlayerWithClient(client).primaryKey, data.opponentId
+        , 2, data.mapType)
 }
 
 exports.SteamFriendInviteAccepted = async function (client, data) {
     let key = await db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.PRIMARYKEY, data.value, dbFields.playerInfo.APIID)
-    matchBegining.LoadMatch(userManager.GetPlayerWithClient(client).primaryKey, key, 0)
+    let nick = await db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.USERNAME, data.value, dbFields.playerInfo.APIID)
+    //matchBegining.LoadMatch(userManager.GetPlayerWithClient(client).primaryKey, key, 0,3)
+    var hostData = {
+        nick: nick,
+        key: key,
+        isHost : true
+    };
+    var playerData = {
+        nick: userManager.GetPlayerWithClient(client).userName,
+        key: "",
+        isHost : false
+    };
+    communication.SendPackage(client, "HostSettingMatch", hostData);
+    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(key).client, "HostSettingMatch", playerData);
 }
 
 exports.InviteDeclined = function (client, data) {

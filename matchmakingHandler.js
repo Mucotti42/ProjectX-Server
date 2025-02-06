@@ -38,7 +38,7 @@ exports.EndMatchmaking = function(client,data){
             continue;
 
         if (Math.abs(player.rank - otherPlayer.rank) <= player.range + otherPlayer.range) {
-            matchBegining.LoadMatch(player.primaryKey,otherPlayer.primaryKey,player.gameMode)
+            matchBegining.LoadMatch(player.primaryKey,otherPlayer.primaryKey,player.gameMode, Math.floor(Math.random() * 4))
 
             pool.splice(pool.indexOf(player), 1);
             pool.splice(pool.indexOf(otherPlayer), 1);

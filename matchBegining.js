@@ -6,14 +6,14 @@ const Match = ActiveMatches.Match;
 const gameStates = require('./gameStates').States
 
 
-exports.LoadMatch = function (player1, player2,gameMode) {
-    
-
-    var map = Math.floor(Math.random() * 4);
+exports.LoadMatch = function (player1, player2,gameMode, map) {
+    //var map = Math.floor(Math.random() * 4);
     var gameId = Math.floor(100000 + Math.random() * 900000).toString();
     
     var match = new Match(player1,player2,gameMode,map,gameId)
 
+    console.log(player1)
+    console.log(player2)
     if(player1 == null || player2 == null)
     {
         console.log("Player no more active in Loadmatch Matchbegining")

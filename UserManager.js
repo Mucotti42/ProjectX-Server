@@ -45,6 +45,7 @@ module.exports = {
     },
 
     GetPlayerWithPrimaryKey: function(primaryKey){
+        console.log("Getting player with: " + primaryKey)
         const foundPlayer = playerInfoList.find(player => player.primaryKey === primaryKey);
 
         if(foundPlayer)

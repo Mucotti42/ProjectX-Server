@@ -94,14 +94,11 @@ exports.ByGleir = function (client, data)
 //data.value = uzay steam key
 //client = muco
 exports.SteamFriendInviteAccepted = async function (client, data) {
-    let key = await db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.PRIMARYKEY, data.value, dbFields.playerInfo.APIID).primaryKey
-    console.log("key" + key);
-    let nick = await db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.USERNAME, data.value, dbFields.playerInfo.APIID).userName
-    console.log("nick" + nick);
-    //matchBegining.LoadMatch(userManager.GetPlayerWithClient(client).primaryKey, key, 0,3)
+    let dbData = await db.GetData(dbFields.tableTypes.PLAYERINFO, null, data.value, dbFields.playerInfo.APIID)
+
     var hostData = {
-        nick: nick,
-        key: key,
+        nick: dbData.nick,
+        key: dbData.key,
         isHost : true
     };
     var playerData = {
@@ -110,7 +107,7 @@ exports.SteamFriendInviteAccepted = async function (client, data) {
         isHost : false
     };
     communication.SendPackage(client, "HostSettingMatch", hostData);
-    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(key).client, "HostSettingMatch", playerData);
+    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(dbData.key).client, "HostSettingMatch", playerData);
 }
 
 exports.InviteDeclined = function (client, data) {

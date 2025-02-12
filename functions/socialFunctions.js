@@ -91,6 +91,8 @@ exports.ByGleir = function (client, data)
         , 2, data.mapType)
 }
 
+//data.value = uzay steam key
+//client = muco
 exports.SteamFriendInviteAccepted = async function (client, data) {
     let key = await db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.PRIMARYKEY, data.value, dbFields.playerInfo.APIID)
     console.log("key" + key);

@@ -94,10 +94,12 @@ exports.ByGleir = function (client, data)
 //data.value = uzay steam key
 //client = muco
 exports.SteamFriendInviteAccepted = async function (client, data) {
-    let dbData = await db.GetData(dbFields.tableTypes.PLAYERINFO, null, data.value, dbFields.playerInfo.APIID)[0]
+    let dbData = await db.GetData(dbFields.tableTypes.PLAYERINFO, null, data.value, dbFields.playerInfo.APIID)
 
     console.log(dbData)
     console.log(dbData.userName)
+    console.log(dbData[0])
+    console.log(dbData[0].userName)
     var hostData = {
         nick: dbData.userName,
         key: dbData.primaryKey,

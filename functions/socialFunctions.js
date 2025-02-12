@@ -97,8 +97,8 @@ exports.SteamFriendInviteAccepted = async function (client, data) {
     let dbData = await db.GetData(dbFields.tableTypes.PLAYERINFO, null, data.value, dbFields.playerInfo.APIID)[0]
 
     var hostData = {
-        nick: dbData.nick,
-        key: dbData.key,
+        nick: dbData.userName,
+        key: dbData.primaryKey,
         isHost : true
     };
     var playerData = {
@@ -107,7 +107,7 @@ exports.SteamFriendInviteAccepted = async function (client, data) {
         isHost : false
     };
     communication.SendPackage(client, "HostSettingMatch", hostData);
-    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(dbData.key).client, "HostSettingMatch", playerData);
+    communication.SendPackage(userManager.GetPlayerWithPrimaryKey(dbData.primaryKey).client, "HostSettingMatch", playerData);
 }
 
 exports.InviteDeclined = function (client, data) {

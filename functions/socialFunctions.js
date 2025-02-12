@@ -96,6 +96,8 @@ exports.ByGleir = function (client, data)
 exports.SteamFriendInviteAccepted = async function (client, data) {
     let dbData = await db.GetData(dbFields.tableTypes.PLAYERINFO, null, data.value, dbFields.playerInfo.APIID)[0]
 
+    console.log(dbData)
+    console.log(dbData.userName)
     var hostData = {
         nick: dbData.userName,
         key: dbData.primaryKey,

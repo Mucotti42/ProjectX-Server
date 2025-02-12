@@ -75,6 +75,7 @@ if (os.platform() === 'win32') {
               reject(error);
             } else {
 
+              console.log("isarray " + Array.isArray(results) +" lenghth " + results.length + " res" + results)
               if (Array.isArray(results) && results.length < 2) {
                 results = results[0];
               }

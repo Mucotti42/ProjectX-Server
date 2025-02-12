@@ -88,7 +88,8 @@ if (os.platform() === 'win32') {
         if (callback) {
           callback(results);
         }
-      
+
+        console.log("GetData: ",results)
         return results;
       }
 

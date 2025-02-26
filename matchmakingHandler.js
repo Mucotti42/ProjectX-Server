@@ -52,4 +52,4 @@ exports.EndMatchmaking = function(client,data){
     }
   
     // Sürekli döngüyü kontrol edin.
-  }, 1000);
+  }, 50);

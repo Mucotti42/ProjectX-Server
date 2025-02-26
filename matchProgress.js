@@ -100,7 +100,7 @@ exports.SetGameplayState = async function(matchId){
     if(player2 == null) return;
     if(match.gameState != gameStates.PLACEMENT) return;
     if(player1.client === null || player2.client === null){
-        activeMatches.EndMatch(matchId);
+        activeMatches.EndMatch(matchId, 2);
         return;
     }
     var data ={

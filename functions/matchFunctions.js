@@ -40,8 +40,11 @@ exports.PlacementUnready = function (client,data) {
     matchProgress.PlacementUnready(player.primaryKey, data.value);
 }
 
-exports.EndGame = function (client,data) {
-    activeMatches.EndMatch(data.value);
+exports.EndGame = function (client,data)
+{
+    const winner = userManager.GetPlayerWithClient(client).primaryKey;
+    const result = winner === activeMatches.GetMatch(data.value).player1 ? 1 : 0;
+    activeMatches.EndMatch(data.value, result);
 }
 
 exports.Surrender = function (client,data) {
@@ -65,8 +68,11 @@ exports.Surrender = function (client,data) {
         if(p.client == null) return;
         communication.SendPackage(p.client,"PlayerSurrendered",loser.primaryKey)
     }
-
-    activeMatches.EndMatch(data.value);
+    const result = activeMatches.GetMatch(data.value).player1 == loser.primaryKey ? 1 : 0;
+    const mat = activeMatches.GetMatch(data.value);
+    console.log("c1 " + userManager.GetPlayerWithPrimaryKey(mat.player1))
+    console.log("c2 " +userManager.GetPlayerWithPrimaryKey(mat.player2))
+    activeMatches.EndMatch(data.value, result);
 }
 
 exports.PieceMove = function (client,data) {

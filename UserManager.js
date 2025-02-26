@@ -1,8 +1,5 @@
 const communication = require('./communication.js')
-
 const db = require('./database.js')
-
-
 class Player{
     constructor(primaryKey, client, socialId, userName){
         this.primaryKey = primaryKey

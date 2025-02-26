@@ -11,6 +11,7 @@ exports.RegisterPlayer = async function(client, data){
     const apiId = data.key
     let primaryKey = ""
     let socialId = ""
+    let registrationDate = ""
     if(isExist)
     {
         await db.GetData(dbFields.tableTypes.PLAYERINFO, null, data.key, dbFields.playerInfo.APIID,
@@ -19,12 +20,14 @@ exports.RegisterPlayer = async function(client, data){
             console.log('returning value with call back ' + incomingData.primaryKey);
             primaryKey = incomingData.primaryKey;
             socialId = incomingData.socialId
+            registrationDate = incomingData.registrationDate
             userManager.RegisterPlayerInfo(incomingData.primaryKey, client, incomingData.socialId, userName)
         })
     }
     else
     {
         socialId = Math.floor(100000 + Math.random() * 900000).toString();
+        registrationDate = new Date().toLocaleDateString('en-GB')
         newPlayer = true;
         console.log('No user exist')
         const userdata ={
@@ -32,9 +35,11 @@ exports.RegisterPlayer = async function(client, data){
             userName: userName,
             apiId: data.key,
             playerRank : 50,
-            characters : '[0, 1, 9, 2, 5, 6, 7, 3, 4]',
-            socialId : socialId
+            characters : '[0, 1, 9, 2, 5, 6, 7, 3, 4, 10, 13]',
+            socialId : socialId,
+            registrationDate: registrationDate
         };
+
         await db.InsertData(dbFields.tableTypes.PLAYERINFO,userdata);
         
         await db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.PRIMARYKEY, data.key, dbFields.playerInfo.APIID,
@@ -44,7 +49,14 @@ exports.RegisterPlayer = async function(client, data){
                     primaryKey : primaryKey,
                     enterance : '[]'
                 };
+                const matchData ={
+                    primaryKey: primaryKey,
+                    matchCount: 0,
+                    winCount: 0,
+                    loseCount: 0
+                }
                 db.InsertData(dbFields.tableTypes.SESSIONINFO,sessionData);
+                db.InsertData(dbFields.tableTypes.MATCHINFO,matchData);
                 //TODO Edit the code at the buttom line that is for testing purposes
                 //const d = [0, 1, 2, 5, 7, 10]
                 //db.SetData(dbFields.tableTypes.PLAYERINFO,dbFields.playerInfo.CHARACTERS,key,JSON.stringify(d))
@@ -60,7 +72,7 @@ exports.RegisterPlayer = async function(client, data){
         socialId: socialId,
         userName: userName,
         apiId : data.key,
-        primaryKey : primaryKey
+        primaryKey : primaryKey,
     };
     console.log(data);
     communication.SendPackage(client,'CompleteRegistration',data)

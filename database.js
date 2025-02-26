@@ -76,7 +76,7 @@ if (os.platform() === 'win32') {
             } else {
 
               console.log("isarray " + Array.isArray(results) +" lenghth " + results.length + " res" + results + " res0" + results[0])
-              if (Array.isArray(results) && results.length < 2) {
+              while (Array.isArray(results) && results.length === 1 && typeof results[0] === "object") {
                 results = results[0];
               }
 
@@ -153,7 +153,7 @@ async function IsRowExists(tableName, key, queryWith = 'primaryKey',callback = n
           });
         };
 
-        const SetData = async function (tableName, fieldName, key, value, queryWith = 'primaryKey') {
+        const SettData = async function (tableName, fieldName, key, value, queryWith = 'primaryKey') {
           return new Promise((resolve, reject) => {
             pool.query(`UPDATE projectxdb.${tableName} SET ${fieldName} = ? WHERE ${queryWith} = ?`, [value, key], (error, results) => {
               if (error) {
@@ -164,8 +164,33 @@ async function IsRowExists(tableName, key, queryWith = 'primaryKey',callback = n
             });
           });
         };
-      
-        const InsertData = async function (tableName, data) {
+
+const SetData = async function (tableName, fieldName, key, value, queryWith = 'primaryKey') {
+  return new Promise((resolve, reject) => {
+    let query;
+    let values = [];
+
+    if (fieldName === null) {
+      const fields = Object.keys(value);
+      const setClause = fields.map(field => `${field} = ?`).join(', ');
+      values = [...Object.values(value), key];
+      query = `UPDATE projectxdb.${tableName} SET ${setClause} WHERE ${queryWith} = ?`;
+    } else {
+      query = `UPDATE projectxdb.${tableName} SET ${fieldName} = ? WHERE ${queryWith} = ?`;
+      values = [value, key];
+    }
+
+    pool.query(query, values, (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+};
+
+const InsertData = async function (tableName, data) {
           return new Promise((resolve, reject) => {
             const fields = Object.keys(data).join(', ');
             const values = Object.values(data).map(value => (value === 'UUID()' ? value : pool.escape(value))).join(', ');

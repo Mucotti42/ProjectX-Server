@@ -4,7 +4,8 @@ const tableTypes = {
   DEVICEINFO:'deviceinfo',
   SESSIONINFO:'sessioninfo',
   CHARACTERINFO:'characterinfo',
-  MARKETPIECEINFO:'marketpieceinfo'
+  MARKETPIECEINFO:'marketpieceinfo',
+  MATCHINFO:'matchinfo'
 }
 
 const playerInfo = {
@@ -19,7 +20,15 @@ const playerInfo = {
   RANK: 'playerRank',
   CHARACTERS: 'characters',
   SOCIALID: 'socialId',
-  INCOMINGINVITES : 'incomingInvites'
+  INCOMINGINVITES : 'incomingInvites',
+  REGISTRATIONDATE: 'registrationDate'
+}
+
+const matchInfo = {
+  PRIMARYKEY: 'primaryKey',
+  MATCHCOUNT: 'matchCount',
+  WINCOUNT: 'winCount',
+  LOSECOUNT: 'loseCount'
 }
 const characterTypes = {
   MUSHROOM:'mushroom',
@@ -35,4 +44,4 @@ const characterTypes = {
   THEKING:'theking'
 }
 
-module.exports = { tableTypes, playerInfo,characterTypes };
+module.exports = { tableTypes, playerInfo,characterTypes, matchInfo };

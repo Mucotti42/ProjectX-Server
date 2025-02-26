@@ -1,8 +1,8 @@
 const db = require('../database.js')
 const dbFields = require('../dbTables.js')
 const communication = require('../communication.js')
-const matchBegining = require("../matchBegining");
 const userManager = require('../UserManager.js')
+const matchBegining = require("../matchBegining");
 
 const inviteResults = {
     NoPlayerFound: 0,
@@ -91,8 +91,6 @@ exports.ByGleir = function (client, data)
         , 2, data.mapType)
 }
 
-//data.value = uzay steam key
-//client = muco
 exports.SteamFriendInviteAccepted = async function (client, data) {
     let dbData = await db.GetData(dbFields.tableTypes.PLAYERINFO, null, data.value, dbFields.playerInfo.APIID)
 
@@ -100,6 +98,7 @@ exports.SteamFriendInviteAccepted = async function (client, data) {
         nick: dbData.userName,
         key: dbData.primaryKey,
         isHost : true
+        
     };
     var playerData = {
         nick: userManager.GetPlayerWithClient(client).userName,

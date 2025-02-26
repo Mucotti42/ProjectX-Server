@@ -11,7 +11,7 @@ exports.GetNews = function (client, data) {
     });
 };
 
-exports.GetNews = function (client, data) {
+exports.ProfileData = function (client, data) {
     var key = userManager.GetPlayerWithClient(client).primaryKey
     db.GetData(dbTables.tableTypes.PLAYERINFO, null, key, dbTables.playerInfo.PRIMARYKEY, (playerData)=>{
         db.GetData(dbTables.tableTypes.MATCHINFO, null, key, dbTables.playerInfo.PRIMARYKEY, (matchData)=>{

@@ -27,7 +27,7 @@ exports.RegisterPlayer = async function(client, data){
     else
     {
         socialId = Math.floor(100000 + Math.random() * 900000).toString();
-        registrationDate = new Date().toLocaleDateString('en-GB')
+        registrationDate = new Date().toLocaleDateString('en-GB').replace(/\//g, '.');
         newPlayer = true;
         console.log('No user exist')
         const userdata ={
@@ -35,7 +35,7 @@ exports.RegisterPlayer = async function(client, data){
             userName: userName,
             apiId: data.key,
             playerRank : 50,
-            characters : '[0, 1, 9, 2, 5, 6, 7, 3, 4, 10, 13]',
+            characters : '[0, 1, 9, 2, 13, 5, 6, 7, 3, 4, 10]',
             socialId : socialId,
             registrationDate: registrationDate
         };

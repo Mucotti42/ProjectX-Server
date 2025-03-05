@@ -36,7 +36,7 @@ exports.GameFriendshipInvite = async function (client, data) {
 
     incomingInvites.unshift(newElement);
     db.SetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.INCOMINGINVITES, data.value, JSON.stringify(incomingInvites), dbFields.playerInfo.SOCIALID)
-
+    //TODO check already invited
     let invitedPlayer = userManager.GetPlayerWithSocialId(data.value)
     if(invitedPlayer){
         communication.SendPackage(invitedPlayer.client, "IncomingGameFriendshipInvite", { socialId: player.socialId, nick: player.userName })

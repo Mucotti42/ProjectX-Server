@@ -16,7 +16,8 @@ exports.CalculateRank = async (playerId, opponentId, result) => {
     const expectedResult = 1 / (1 + Math.pow(10, (opponentRank - previousRank) / 400));
     console.log("expectedResult: " + expectedResult)
     const k = 40 / (1 + matchCount / 30.0);
-    const newRank = Math.round(previousRank + k * (resultValue - expectedResult));
+    let newRank = Math.round(previousRank + k * (resultValue - expectedResult));
+    if(newRank < 0) newRank = 0;
     const rankData ={
         oldRank: previousRank,
         newRank: newRank

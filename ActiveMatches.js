@@ -4,7 +4,7 @@ const dbTables = require('./dbTables')
 const communication = require('./communication')
 const userManager = require('./UserManager')
 exports.Match = class{
-    constructor(player1, player2,gameMode,map, gameId){
+    constructor(player1, player2,gameMode,map, gameId, enemyNick){
         this.player1 = player1;
         this.player2 = player2;
         this.gameMode = gameMode;
@@ -18,6 +18,7 @@ exports.Match = class{
         this.players.push(player1);
         this.players.push(player2);
         this.turn = 1;
+        this.enemyNick = enemyNick;
     }
 }
 const matches = new Map();

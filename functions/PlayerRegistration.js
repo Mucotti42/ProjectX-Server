@@ -34,7 +34,7 @@ exports.RegisterPlayer = async function(client, data){
             primaryKey: 'UUID()',
             userName: userName,
             apiId: data.key,
-            playerRank : 50,
+            playerRank : 1000,
             characters : '[0, 1, 9, 2, 13, 5, 6, 7, 3, 4, 10]',
             socialId : socialId,
             registrationDate: registrationDate
@@ -78,5 +78,5 @@ exports.RegisterPlayer = async function(client, data){
     communication.SendPackage(client,'CompleteRegistration',data)
 }
 exports.Disconnect = async function(){
-
+    
 }

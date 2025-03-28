@@ -10,7 +10,7 @@ exports.LoadMatch = function (player1, player2,gameMode, map) {
     //var map = Math.floor(Math.random() * 4);
     var gameId = Math.floor(100000 + Math.random() * 900000).toString();
     
-    var match = new Match(player1,player2,gameMode,map,gameId)
+    var match = new Match(player1,player2,gameMode,map,gameId,"")
 
     console.log(player1)
     console.log(player2)
@@ -30,8 +30,9 @@ exports.LoadMatch = function (player1, player2,gameMode, map) {
     }
 
     ActiveMatches.SetMatch(gameId,match)
-
+    match.enemyNick = p2.userName;
     communication.SendPackage(p1.client,'LoadMatch',match);
+    match.enemyNick = p1.userName;
     communication.SendPackage(p2.client,'LoadMatch',match);
 
     console.log('Match Loaded')

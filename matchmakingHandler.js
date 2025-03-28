@@ -16,7 +16,7 @@ const pool = [];
 exports.StartMatchmaking = function (client, gameMode) {
     var p = userManager.GetPlayerWithClient(client)
     var rank = db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.RANK,p.primaryKey,dbFields.playerInfo.PRIMARYKEY ,(data)=>{
-      var player = new Player(p.primaryKey,client,gameMode,data.playerRank)
+      var player = new Player(p.primaryKey,client,gameMode,/*data.playerRank*/50)
       pool.push(player)
       console.log('Player started matchmaking with id: ' + p.primaryKey)
     })

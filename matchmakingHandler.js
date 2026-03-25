@@ -1,55 +1,80 @@
-const db = require('./database.js')
-const userManager = require('./UserManager.js')
-const dbFields = require('./dbTables.js')
-const matchBegining = require('./matchBegining.js')
+const db = require('./database.js');
+const userManager = require('./UserManager.js');
+const dbFields = require('./dbTables.js');
+const matchBegining = require('./matchBegining.js');
 
-class Player{
-    constructor(primaryKey, client,gameMode,rank){
-        this.primaryKey = primaryKey
-        this.client = client
-        this.gameMode = gameMode
-        this.rank = rank
-        this.range = 3
+class Player {
+    constructor(primaryKey, client, gameMode, rank) {
+        this.primaryKey = primaryKey;
+        this.client = client;
+        this.gameMode = gameMode; // 1 = ranked, 2 = casual
+        this.rank = rank;
+        this.range = 3;
     }
 }
-const pool = [];
+
+// gameMode değerleri: 1 = ranked, 2 = casual
+const pool = {
+    1: [], // ranked
+    2: []  // casual
+};
+
 exports.StartMatchmaking = function (client, gameMode) {
-    var p = userManager.GetPlayerWithClient(client)
-    var rank = db.GetData(dbFields.tableTypes.PLAYERINFO, dbFields.playerInfo.RANK,p.primaryKey,dbFields.playerInfo.PRIMARYKEY ,(data)=>{
-      var player = new Player(p.primaryKey,client,gameMode,/*data.playerRank*/50)
-      pool.push(player)
-      console.log('Player started matchmaking with id: ' + p.primaryKey)
-    })
-    
-}
-exports.EndMatchmaking = function(client,data){
-    const playerIndex = pool.findIndex(player => player.client === client);
-    if (playerIndex !== -1) {
-    pool.splice(playerIndex, 1);
-}
-}
+    const p = userManager.GetPlayerWithClient(client);
 
-  
-  let timer = setInterval(() => {
-    // Tüm oyuncuları karşılaştırın.
-    for (const player of pool) {
-      for (const otherPlayer of pool) {
-        if (player.primaryKey === otherPlayer.primaryKey) 
-            continue;
-
-        if (Math.abs(player.rank - otherPlayer.rank) <= player.range + otherPlayer.range) {
-            matchBegining.LoadMatch(player.primaryKey,otherPlayer.primaryKey,player.gameMode, Math.floor(Math.random() * 4))
-
-            pool.splice(pool.indexOf(player), 1);
-            pool.splice(pool.indexOf(otherPlayer), 1);
+    db.GetData(
+        dbFields.tableTypes.PLAYERINFO,
+        dbFields.playerInfo.RANK,
+        p.primaryKey,
+        dbFields.playerInfo.PRIMARYKEY,
+        (data) => {
+            const playerRank = gameMode === 1 ? data : 0; // only ranked mode uses rank
+            const player = new Player(p.primaryKey, client, gameMode, playerRank);
+            pool[gameMode].push(player);
+            console.log(`Player ${p.primaryKey} started matchmaking in mode ${gameMode === 1 ? 'ranked' : 'casual'}`);
         }
-      }
+    );
+};
+
+exports.EndMatchmaking = function (client, gameMode) {
+    const arr = pool[gameMode];
+    const playerIndex = arr.findIndex(player => player.client === client);
+    if (playerIndex !== -1) {
+        arr.splice(playerIndex, 1);
+        console.log(`Player left matchmaking from mode ${gameMode === 1 ? 'ranked' : 'casual'}`);
     }
-  
-    // Range'i güncelle
-    for (const player of pool) {
-      player.range++;
+};
+
+function matchPlayersFromPool(poolArray, gameMode) {
+    for (const player of [...poolArray]) {
+        for (const otherPlayer of [...poolArray]) {
+            if (player.primaryKey === otherPlayer.primaryKey) continue;
+
+            const rankGap = Math.abs(player.rank - otherPlayer.rank);
+            const allowedGap = player.range + otherPlayer.range;
+
+            if (rankGap <= allowedGap) {
+                matchBegining.LoadMatch(
+                    player.primaryKey,
+                    otherPlayer.primaryKey,
+                    gameMode,
+                    Math.floor(Math.random() * 4)
+                );
+
+                poolArray.splice(poolArray.indexOf(player), 1);
+                poolArray.splice(poolArray.indexOf(otherPlayer), 1);
+                console.log(`Matched ${player.primaryKey} vs ${otherPlayer.primaryKey} in ${gameMode === 1 ? 'ranked' : 'casual'}`);
+                break;
+            }
+        }
     }
-  
-    // Sürekli döngüyü kontrol edin.
-  }, 50);
+
+    for (const player of poolArray) {
+        player.range++;
+    }
+}
+
+setInterval(() => {
+    matchPlayersFromPool(pool[1], 1); // ranked
+    matchPlayersFromPool(pool[2], 2); // casual
+}, 50);

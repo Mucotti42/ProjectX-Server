@@ -2,6 +2,19 @@ const db = require('../database.js')
 const communication = require('../communication.js')
 const dbFields = require('../dbTables.js')
 const userManager = require('../UserManager.js')
+const database = require("../database");
+
+class PieceCard {
+    constructor(type, damage, health, strong, cost, damageType)
+    {
+        this.type = type;
+        this.health = health;
+        this.damage = damage;
+        this.strong = strong;
+        this.cost = cost;
+        this.damageType = damageType;
+    }
+}
 
 exports.RegisterPlayer = async function(client, data){
 
@@ -63,10 +76,20 @@ exports.RegisterPlayer = async function(client, data){
                 userManager.RegisterPlayerInfo(primaryKey, client, socialId, userName)
             })
     }
-    db.GetDataWithQuery('SELECT projectxdb.marketpieceinfo.*, projectxdb.characterinfo.damage, projectxdb.characterinfo.health FROM projectxdb.marketpieceinfo' +
-        ' JOIN projectxdb.characterinfo ON projectxdb.marketpieceinfo.id = projectxdb.characterinfo.type;', (data)=>{
-        communication.SendPackage(client,'RegisterMarketPieces',data)
-    })
+    //db.GetDataWithQuery('SELECT projectxdb.marketpieceinfo.*, projectxdb.characterinfo.damage, projectxdb.characterinfo.health FROM projectxdb.marketpieceinfo' +
+    //    ' JOIN projectxdb.characterinfo ON projectxdb.marketpieceinfo.id = projectxdb.characterinfo.type;', (data)=>{
+    //    communication.SendPackage(client,'RegisterMarketPieces',data)
+    //})
+    database.GetCharacterData(null, null, (piece) => {
+        const pieces = []
+        piece.forEach((data) => {
+            var piece = new PieceCard(data.type, data.damage,data.health,data.strong, data.cost, data.damageType);
+
+            pieces.push(piece)
+        })
+
+        communication.SendPackage(client,'RegisterMarketPieces',pieces)
+    });
     var data = {
         newPlayer: newPlayer,
         socialId: socialId,

@@ -9,7 +9,6 @@ const gameStates = require('./gameStates').States
 exports.LoadMatch = function (player1, player2,gameMode, map) {
     //var map = Math.floor(Math.random() * 4);
     var gameId = Math.floor(100000 + Math.random() * 900000).toString();
-    
     var match = new Match(player1,player2,gameMode,map,gameId,"")
 
     console.log(player1)
@@ -28,6 +27,9 @@ exports.LoadMatch = function (player1, player2,gameMode, map) {
         console.log("p no more active in Loadmatch Matchbegining")
         return;
     }
+
+    p1.matchId = gameId
+    p2.matchId = gameId
 
     ActiveMatches.SetMatch(gameId,match)
     match.enemyNick = p2.userName;

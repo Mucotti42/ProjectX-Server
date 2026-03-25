@@ -4,7 +4,6 @@ const tableTypes = {
   DEVICEINFO:'deviceinfo',
   SESSIONINFO:'sessioninfo',
   CHARACTERINFO:'characterinfo',
-  MARKETPIECEINFO:'marketpieceinfo',
   MATCHINFO:'matchinfo'
 }
 
@@ -30,18 +29,5 @@ const matchInfo = {
   WINCOUNT: 'winCount',
   LOSECOUNT: 'loseCount'
 }
-const characterTypes = {
-  MUSHROOM:'mushroom',
-  PIXIE:'pixie',
-  SWORDSMAN:'swordsman',
-  ENGAGEANDOUT:'engageandout',
-  RHINO:'rhino',
-  TWINARCHERS:'twinarchers',
-  LIGHTNINGMAGE:'lightningmage',
-  SUPERTANK:'supertank',
-  NECROMANCER:'necromancer',
-  HORTLAK:'hortlak',
-  THEKING:'theking'
-}
 
-module.exports = { tableTypes, playerInfo,characterTypes, matchInfo };
+module.exports = { tableTypes, playerInfo, matchInfo };

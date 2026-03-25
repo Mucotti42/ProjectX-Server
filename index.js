@@ -3,8 +3,7 @@ const WebSocket = require('ws')
 const userManager = require('./UserManager')
 const matchmakingHandler = require('./matchmakingHandler.js')
 
-const wsPort = 8080
-
+const wsPort = process.env.PORT || 8080
 //Starting ----------------------------
 const server = new WebSocket.Server({port: wsPort},()=>
 {

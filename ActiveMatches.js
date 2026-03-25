@@ -39,16 +39,31 @@ exports.SetMatch = function (gameId, match) {
     matches.set(gameId, match);
 }
 
+exports.HasMatch = function (primaryKey){
+
+}
 exports.SetMatchState = function(gameId, state){
     this.GetMatch(gameId).gameState = state;
 }
+
 exports.EndMatch = async function(gameId, result){
     console.log("gameid: "+ gameId)
     console.log("result " + result)
     if(matches.has(gameId))
     {
-        console.log("matches has match")
         var match = matches.get(gameId);
+        for (const player in match.players) {
+            if (player != null) {
+                player.matchId = null;
+            }
+        }
+        if(match.gameMode !== 1)
+        {
+            matches.delete(gameId)
+            console.log('Game End with gameId : ', gameId)
+            console.log("matches has match")
+            return;
+        }
         console.log("matchplayers " + match.players)
         if(result == 2)
         {

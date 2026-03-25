@@ -1,5 +1,6 @@
 const communication = require('./communication.js')
 const db = require('./database.js')
+const activeMatches = require('./ActiveMatches')
 class Player{
     constructor(primaryKey, client, socialId, userName){
         this.primaryKey = primaryKey
@@ -7,6 +8,7 @@ class Player{
         this.enteranceTime = new Date(Date.now())
         this.socialId = socialId
         this.userName =  userName
+        this.matchId = null
     }
 }
 const playerInfoList = []  //Holds Player Info
@@ -28,6 +30,12 @@ module.exports = {
         const player = this.GetPlayerWithClient(client);
         if(player == null) return;
 
+        if(player.matchId !== null)
+        {
+            var match = activeMatches.GetMatch(player.matchId);
+            if(match !== null)
+                activeMatches.EndMatch(match.gameId, match.players[0] === player.primaryKey ? 0 : 1)
+        }
         const jsonData = {
             startDate: player.enteranceTime.toISOString(),
             endDate: new Date(Date.now())

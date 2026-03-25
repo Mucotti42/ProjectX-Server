@@ -23,6 +23,7 @@ class PieceInfo {
       this.ally = ally;
     }
   }
+
 const playerPieces = new Map();
 
 exports.StartMatch = function (match){
